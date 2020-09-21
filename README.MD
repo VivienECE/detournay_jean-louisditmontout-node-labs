@@ -4,9 +4,9 @@ Vivien DETOURNAY SI 01 (INTER)
 
 # Student works
 
--path local 'http://localhost:8080/' display Hello
--path local 'http://localhost:8080/hello?name=vivien' display Hello vivien (but takes a long time to display idk why)
--any other path display 404 Not Found
+- path local 'http://localhost:8080/' display Hello
+- path local 'http://localhost:8080/hello?name=vivien' display Hello vivien (but takes a long time to display idk why)
+- any other path display 404 Not Found
 
 # Lab Instructions
 

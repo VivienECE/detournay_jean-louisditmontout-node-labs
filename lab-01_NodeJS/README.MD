@@ -10,11 +10,7 @@ Vivien DETOURNAY SI 01 (INTER)
 
 # Lab Instructions
 
-- `/` explains how `/hello` works:
-path local 'http://localhost:8080/' display Hello
-path local 'http://localhost:8080/hello?name=vivien' display Hello vivien (but takes a long time to display idk why)
-any other path display 404 Not Found
-
+- `/` explains how `/hello` works
 - `/hello` takes a `name` query parameter and
   - random names replies `hello [name]`
   - your own name replies with a short intro of yourself

@@ -1,2 +1,2 @@
 # viviendetournay-node-labs
-All adaltas lab
+All adaltas labs

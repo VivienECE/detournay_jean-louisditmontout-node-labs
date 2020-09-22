@@ -1,13 +1,13 @@
 {
   "name": "01_NodeJS",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vivien DETOURNAY <vivien.detournay@edu.ece.fr>",
+  "contributors": ["Clemence JEAN-LOUIS DIT MONTOUT <clemence.jean-louis-dit-montout@edu.ece.fr>"],
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"

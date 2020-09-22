@@ -1,6 +1,7 @@
 # Lab 1
 
-Vivien DETOURNAY SI 01 (INTER)
+Vivien DETOURNAY
+Clémence JEAN-LOUIS DIT MONTOUT
 
 # Student works
 

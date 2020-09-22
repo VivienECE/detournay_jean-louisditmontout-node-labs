@@ -1,7 +1,7 @@
 # Lab 1
 
-Vivien DETOURNAY
-Clémence JEAN-LOUIS DIT MONTOUT
+- Vivien DETOURNAY
+- Clémence JEAN-LOUIS DIT MONTOUT
 
 # Student works
 

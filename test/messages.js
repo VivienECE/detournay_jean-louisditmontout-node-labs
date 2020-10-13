@@ -30,13 +30,16 @@ describe('messages', () => {
     await supertest(app)
     .post(`/channels/${channel.id}/messages`)
     .send({content: 'Hello ECE'})
+    .send({creation: Date.now()})
+    .send({id_channel: channel.id})
     // Get messages
     const {body: messages} = await supertest(app)
     .get(`/channels/${channel.id}/messages`)
     .expect(200)
     messages.should.match([{
       creation: (it) => it.should.be.approximately(Date.now(), 1000),
-      content: 'Hello ECE'
+      content: 'Hello ECE',
+      id_channel: /^\w+-\w+-\w+-\w+-\w+$/
     }])
   })
 
@@ -49,10 +52,13 @@ describe('messages', () => {
     const {body: message} = await supertest(app)
     .post(`/channels/${channel.id}/messages`)
     .send({content: 'Hello ECE'})
+    .send({creation: Date.now()})
+    .send({id_channel: channel.id})
     .expect(201)
     message.should.match({
       creation: (it) => it.should.be.approximately(Date.now(), 1000),
-      content: 'Hello ECE'
+      content: 'Hello ECE',
+      id_channel: channel.id
     })
     // Check it was correctly inserted
     const {body: messages} = await supertest(app)

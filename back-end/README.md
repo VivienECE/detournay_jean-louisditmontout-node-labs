@@ -18,6 +18,7 @@ Run the tests with mocha:
 npm run test
 ```
 
-## Instructions
+## Implemented function
 
-See "../lab.md" for the lab instructions.
+- LevelDB implementation
+- Test (channels, messages, users) : Try to check empty list, list one element, add one element

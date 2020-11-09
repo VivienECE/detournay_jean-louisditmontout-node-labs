@@ -1,12 +1,13 @@
 import {useState} from 'react';
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
+import React, { Component } from 'react';
 import Channels from './Channels'
 import Channel from './Channel'
 
 const styles = {
   main: {
-    backgroundColor: '#373B44',
+    backgroundColor: 'rgba(255,255,255,.1)',
     flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'row',
@@ -14,11 +15,15 @@ const styles = {
   },
 }
 
-export default () => {
-  return (
-      <main className="App-main" css={styles.main}>
-       <Channels />
-       <Channel />
-      </main>
-  );
+class Main extends React.Component{
+  render() {
+      return(
+        <main className="App-main" css={styles.main}>
+        <Channels/>
+        <Channel/>
+       </main>
+      );
+  }
 }
+
+export default Main;

@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core'
 const styles = {
   header: {
     height: '60px',
-    backgroundColor: 'rgba(255,255,255,.3)',
+    backgroundColor: 'rgba(255,255,255,.1)',
     flexShrink: 0,
   },
 }
@@ -11,7 +11,7 @@ const styles = {
 export default () => { 
 	return (
       <header css={styles.header}>
-        Header...
+        <h2>Messagerie</h2>
       </header>
   	);
 }

@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core'
 const styles = {
   footer: {
     height: '30px',
-    backgroundColor: 'rgba(255,255,255,.3)',
+    //backgroundColor: 'rgba(255,255,255,.1)',
     flexShrink: 0,
   },
 }
@@ -11,7 +11,6 @@ const styles = {
 export default () => { 
 	return (
        <footer css={styles.footer}>
-        footer
       </footer>
   	);
 }

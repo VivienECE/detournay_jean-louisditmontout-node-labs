@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import {useState} from 'react';
 import { jsx } from '@emotion/core'
+import React, { Component } from 'react';
 import Messages from './Messages'
 import MessageSend from './MessageSend'
 
@@ -12,6 +13,9 @@ const styles = {
     flexDirection: 'column',
     overflow: 'hidden',
   },
+  header:{
+    backgroundColor: 'rgba(255,255,255,.1)',
+  }
 }
 
 export default ({
@@ -94,11 +98,21 @@ export default ({
     [Prism](https://prismjs.com/).
     `,
   }])
+  
+  const addMessage = (message) => {
+    setMessages([
+      ...messages,
+      message
+    ])
+  }  
+
   return (
       <div css={styles.channel}>
-            <h1>Messages for {channel.name}</h1>
-            <Messages/>
-            <MessageSend />
+        <div css={styles.header}>
+            <h2>Messages for {channel.name}</h2>
         </div>
+        <Messages channel={channel} messages={messages}/>
+        <MessageSend addMessage={addMessage}/>
+      </div>
   );
 }

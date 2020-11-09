@@ -2,6 +2,7 @@
 import {useState} from 'react';
 import { jsx } from '@emotion/core'
 import React, { Component } from 'react';
+import moment from 'moment';
 
 const styles = {
   messages: {
@@ -33,9 +34,9 @@ class Messages extends React.Component{
                { this.props.messages.map( (message, i) => (
                  <li key={i} css={styles.message}>
                    <p>
-                     <span>{message.author}</span>
+                     <span>{message.author} : </span>
                      {' '}
-                     <span>{(new Date(message.creation)).toString()}</span>
+                     <span>{(moment(new Date(message.creation))).format("[Le] d MMM YYYY")}</span>
                    </p>
                    <div>
                      {

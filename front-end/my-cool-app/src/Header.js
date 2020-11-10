@@ -5,13 +5,15 @@ const styles = {
     height: '60px',
     backgroundColor: 'rgba(255,255,255,.1)',
     flexShrink: 0,
+    borderStyle: 'inset',
   },
 }
 
 export default () => { 
 	return (
       <header css={styles.header}>
-        <h2>Messagerie</h2>
+        <h3>Welcome</h3>
+
       </header>
   	);
 }

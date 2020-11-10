@@ -21,6 +21,7 @@ const styles = {
       'textIndent': 0,
       'listStyleType': 0,
     },
+    borderRightStyle: 'inset',
   },
   message: {
     margin: '.2rem',

@@ -8,6 +8,8 @@ const styles = {
     display: 'flex',
     background: 'rgba(255, 255, 255, 0.1)',
     border: 'none',
+    borderRightStyle: 'inset',
+    borderBottomStyle: 'inset',
     outline: 'none',
   },
   content: {

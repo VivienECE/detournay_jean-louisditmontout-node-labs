@@ -7,6 +7,7 @@ const styles = {
   channels: {
     minWidth: '200px',
     backgroundColor: 'rgba(255,255,255,.1)',
+    borderStyle: 'inset',
   },
   channel:{
 

@@ -14,6 +14,8 @@ const styles = {
   },
   header:{
     backgroundColor: 'rgba(255,255,255,.1)',
+    borderRightStyle: 'inset',
+    textAlign: 'center',
   }
 }
 
@@ -108,7 +110,7 @@ export default ({
   return (
       <div css={styles.channel}>
         <div css={styles.header}>
-            <h2>Messages for {channel.name}</h2>
+            <h2>    Messages for {channel.name}</h2>
         </div>
         <Messages channel={channel} messages={messages}/>
         <MessageSend addMessage={addMessage}/>

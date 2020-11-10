@@ -1,8 +1,15 @@
 /** @jsx jsx */
-import {useState} from 'react';
 import { jsx } from '@emotion/core'
-import React, { Component } from 'react';
+import React from 'react';
 import moment from 'moment';
+import Prism from 'prismjs'
+
+
+// The code snippet you want to highlight, as a string
+const code = `var data = 1;`;
+
+// Returns a highlighted HTML string
+const html = Prism.highlight(code, Prism.languages.javascript, 'javascript');
 
 const styles = {
   messages: {

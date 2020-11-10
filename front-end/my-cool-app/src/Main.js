@@ -1,7 +1,6 @@
-import {useState} from 'react';
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import React, { Component } from 'react';
+import React from 'react';
 import Channels from './Channels'
 import Channel from './Channel'
 

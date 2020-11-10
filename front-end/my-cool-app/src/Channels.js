@@ -1,9 +1,7 @@
 /** @jsx jsx */
 
-import {useState} from 'react';
 import { jsx } from '@emotion/core'
 import {axios} from 'axios';
-import React, { Component } from 'react';
 
 const styles = {
   channels: {
@@ -31,6 +29,7 @@ export default () => {
   );
 }
 
+/**
 class Channel extends React.Component{
   render() {
       return(
@@ -48,7 +47,7 @@ class Channel extends React.Component{
   }
 }
 
-//export default Channel;
+export default Channel; */
 
 
 

@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import {useState} from 'react';
 import { jsx } from '@emotion/core'
-import React, { Component } from 'react';
 import Messages from './Messages'
 import MessageSend from './MessageSend'
 

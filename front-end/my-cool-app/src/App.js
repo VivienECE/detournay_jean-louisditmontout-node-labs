@@ -1,8 +1,7 @@
-import {useState} from 'react';
 import './App.css';
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import React, { Component } from 'react';
+import React from 'react';
 import Header from './Header'
 import Footer from './Footer'
 import Main from './Main'
@@ -19,10 +18,6 @@ const styles = {
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
         <body>

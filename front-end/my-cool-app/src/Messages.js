@@ -40,11 +40,11 @@ class Messages extends React.Component{
         <ul>
                { this.props.messages.map( (message, i) => (
                  <li key={i} css={styles.message}>
-                   <p>
+                   <p><b>
                      <span>{message.author} : </span>
                      {' '}
                      <span>{(moment(new Date(message.creation))).format("[Le] D MMM YYYY [à] hh:mm")}</span>
-                   </p>
+                     </b></p>
                    <div>
                      {
                        message.content

@@ -35,14 +35,14 @@ class Channel extends React.Component{
   render() {
       return(
         <div css={styles.channels}>
-        <p> Available channels: </p>
-        	  <ul>
-              { this.props.channels.map( (channel) => (
-                <li key={channel.id} css={styles.channel}>
-                	{channel.name}
-                </li>
-              ))}
-            </ul>
+          <p> Available channels: </p>
+          <ul>
+            {this.props.channels.map( (channel) => (
+              <li key={channel.id} css={styles.channel}>
+                {channel.name}
+              </li>
+            ))}
+          </ul>
         </div>
       );
   }

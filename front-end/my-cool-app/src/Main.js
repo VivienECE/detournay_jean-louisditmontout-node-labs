@@ -18,9 +18,9 @@ class Main extends React.Component{
   render() {
       return(
         <main className="App-main" css={styles.main}>
-        <Channels/>
-        <Channel/>
-       </main>
+          <Channels/>
+          <Channel/>
+        </main>
       );
   }
 }

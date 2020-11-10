@@ -37,26 +37,26 @@ class Messages extends React.Component{
   render() {
       return(
         <div className="messages" css={styles.messages}>
-        <ul>
-               { this.props.messages.map( (message, i) => (
-                 <li key={i} css={styles.message}>
-                   <p><b>
-                     <span>{message.author} : </span>
-                     {' '}
-                     <span>{(moment(new Date(message.creation))).format("[Le] D MMM YYYY [à] hh:mm")}</span>
-                     </b></p>
-                   <div>
-                     {
-                       message.content
-                       .split(/(\n +\n)/)
-                       .filter( el => el.trim() )
-                       .map( el => <p>{el}</p>)
-                     }
-                   </div>
-                 </li>
-               ))}
-             </ul>
-       </div>  
+          <ul>
+            {this.props.messages.map( (message, i) => (
+              <li key={i} css={styles.message}>
+                <p><b>
+                  <span>{message.author} : </span>
+                  {' '}
+                  <span>{(moment(new Date(message.creation))).format("[Le] D MMM YYYY [à] hh:mm")}</span>
+                </b></p>
+                <div>
+                  {
+                    message.content
+                    .split(/(\n +\n)/)
+                    .filter( el => el.trim() )
+                    .map( el => <p>{el}</p>)
+                  }
+                </div>
+              </li>
+            ))}
+          </ul>
+         </div>  
       );
   }
 }

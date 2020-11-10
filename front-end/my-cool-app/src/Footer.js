@@ -10,7 +10,7 @@ const styles = {
 
 export default () => { 
 	return (
-       <footer css={styles.footer}>
+      <footer css={styles.footer}>
       </footer>
   	);
 }

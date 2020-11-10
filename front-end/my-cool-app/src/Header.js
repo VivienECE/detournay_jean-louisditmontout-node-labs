@@ -13,7 +13,6 @@ export default () => {
 	return (
       <header css={styles.header}>
         <h3>Welcome</h3>
-
       </header>
   	);
 }

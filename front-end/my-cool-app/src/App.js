@@ -22,10 +22,10 @@ class App extends React.Component {
     return (
         <body>
           <div className="App" css={styles.root}>
-          <Header />
-          <Main/>
-          <Footer />
-        </div>
+            <Header />
+            <Main/>
+            <Footer />
+          </div>
        </body>
     );
   }

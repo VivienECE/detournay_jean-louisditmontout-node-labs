@@ -9,3 +9,9 @@
   background: -webkit-Linear-gradient(to left,#184d5d,#270c59);
   background: Linear-gradient(to left,#184d5d,#270c59); 
 }
+
+.messages{
+  scrollbar-color:rgba(255,255,255,.1) rgba(255,255,255,.01);
+  scrollbar-width: thin;
+  overflow: auto;
+}

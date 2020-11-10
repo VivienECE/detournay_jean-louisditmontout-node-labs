@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core'
 import React from 'react';
 import moment from 'moment';
 import Prism from 'prismjs'
-
+import './App.css';
 
 // The code snippet you want to highlight, as a string
 const code = `var data = 1;`;
@@ -15,7 +15,6 @@ const styles = {
   messages: {
     flex: '1 1 auto',
     height: '100%',
-    overflow: 'auto',
     '& ul': {
       'margin': 0,
       'padding': 0,
@@ -36,7 +35,7 @@ const styles = {
 class Messages extends React.Component{
   render() {
       return(
-        <div css={styles.messages}>
+        <div className="messages" css={styles.messages}>
         <ul>
                { this.props.messages.map( (message, i) => (
                  <li key={i} css={styles.message}>

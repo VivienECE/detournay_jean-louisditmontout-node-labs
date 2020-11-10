@@ -42,7 +42,7 @@ class Messages extends React.Component{
                    <p>
                      <span>{message.author} : </span>
                      {' '}
-                     <span>{(moment(new Date(message.creation))).format("[Le] D MMM YYYY")}</span>
+                     <span>{(moment(new Date(message.creation))).format("[Le] D MMM YYYY [à] hh:mm")}</span>
                    </p>
                    <div>
                      {

@@ -4,6 +4,7 @@ import React from 'react';
 import moment from 'moment';
 import Prism from 'prismjs'
 import './App.css';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 
 // The code snippet you want to highlight, as a string
 const code = `var data = 1;`;
@@ -43,7 +44,7 @@ class Messages extends React.Component{
                 <p><b>
                   <span>{message.author} : </span>
                   {' '}
-                  <span>{(moment(new Date(message.creation))).format("[Le] D MMM YYYY [à] hh:mm")}</span>
+                  <span>{message.creation}</span>
                 </b></p>
                 <div>
                   {
@@ -56,7 +57,7 @@ class Messages extends React.Component{
               </li>
             ))}
           </ul>
-         </div>  
+         </div>
       );
   }
 }

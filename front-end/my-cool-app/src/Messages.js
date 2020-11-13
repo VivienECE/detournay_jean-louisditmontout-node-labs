@@ -14,6 +14,8 @@ const html = Prism.highlight(code, Prism.languages.javascript, 'javascript');
 
 const styles = {
   messages: {
+    display : 'flex',
+    flexDirection : 'column-reverse',
     flex: '1 1 auto',
     height: '100%',
     '& ul': {
@@ -35,16 +37,28 @@ const styles = {
 }
 
 class Messages extends React.Component{
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    this.el.scrollIntoView({ behavior: 'smooth' });
+  }
+
   render() {
       return(
-        <div className="messages" css={styles.messages}>
+        <div className="messages" css={styles.messages} ref={el => { this.el = el; }}>
           <ul>
             {this.props.messages.map( (message, i) => (
               <li key={i} css={styles.message}>
                 <p><b>
                   <span>{message.author} : </span>
                   {' '}
-                  <span>{message.creation}</span>
+                  <span>{format(new Date(message.creation / 1000), "do MMM p")}</span>
                 </b></p>
                 <div>
                   {

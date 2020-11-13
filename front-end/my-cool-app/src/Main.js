@@ -64,7 +64,8 @@ class Main extends React.Component{
   }
 
   async componentDidMount() {
-    fetch('http://localhost:3001/channels')
+    //fetch('http://localhost:3001/channels')
+    fetch('http://192.168.16.128:3001/channels')
       .then(response => response.json())
       .then((data) =>{
         this.setState({
@@ -78,14 +79,15 @@ class Main extends React.Component{
 
   setId = (newChannelId) =>{
     this.setState(state => ({ idchannel: newChannelId}));
-      axios.get('http://localhost:3001/channels/'+newChannelId+'/messages')
+      //axios.get('http://localhost:3001/channels/'+newChannelId+'/messages')
+      axios.get('http://192.168.16.128:3001/channels/'+newChannelId+'/messages')
       .then((response) =>{
         //this.setState({messages:response.data})
         this.setState({
           messages: response.data.map(message => ({
             author: message.author,
             content: message.content,
-            creation: message.creation,
+            creation: Number(message.creation),
             channelId: message.channelId,
             }))
         })
@@ -93,15 +95,21 @@ class Main extends React.Component{
   }
 
   addMessage = (message) => {
-    this.setState({
+    /**this.setState({
       messages: [
           ...this.state.messages,
           message
       ]
-    })
-    var data = new FormData();
-    data.append( "json",JSON.stringify({data}));
-    axios.post('http://localhost:3001/channels/'+this.state.idchannel+'/messages', message)
+    })**/
+    //fetch('http://localhost:3001/channels/'+this.state.idchannel+'/messages', {
+    fetch('http://192.168.16.128:3001/channels/'+this.state.idchannel+'/messages', {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        from: 'PostMessage',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(message),
+      })
+      .then(response => response.json())
+    this.setId(this.state.idchannel)
  }
 
   render() {

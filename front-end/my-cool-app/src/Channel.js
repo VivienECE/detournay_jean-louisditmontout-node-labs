@@ -1,36 +1,69 @@
+import {useRef, useState} from 'react';
+import axios from 'axios';
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
+// Layout
+import { useTheme } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+// Local
 import Messages from './Messages'
 import MessageSend from './MessageSend'
-import React, { useState, useEffect, data } from 'react';
-import axios from 'axios';
 
-const styles = {
-  channel: {
+const useStyles = (theme) => ({
+  root: {
     height: '100%',
     flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
+    background: 'rgba(0,0,0,.2)',
+    position: 'relative',
   },
-  header:{
-    backgroundColor: 'rgba(255,255,255,.1)',
-    textAlign: 'center',
+  fab: {
+    position: 'absolute !important',
+    // position: 'fixed !important',
+    top: theme.spacing(2),
+    // width: '50px',
+    // bottom: '0',
+    // marginLeft: '100%',
+    // bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  fabDisabled: {
+    display: 'none !important',
   }
-}
+})
 
-class Main extends React.Component{
-  render() {
-    return (
-        <div css={styles.channel}>
-          <div css={styles.header}>
-              <h2>    Messages for {this.props.channel.name}</h2>
-          </div>
-          <Messages  messages={this.props.messages}/>
-          <MessageSend addMessage={this.props.addMessage}/>
-        </div>
-    );
+export default ({
+  channel, messages, addMessage
+}) => {
+  const styles = useStyles(useTheme())
+  const listRef = useRef();
+  const channelId = useRef()
+  const [scrollDown, setScrollDown] = useState(false)
+  const onScrollDown = (scrollDown) => {
+    setScrollDown(scrollDown)
   }
+  const onClickScroll = () => {
+    listRef.current.scroll()
+  }
+  return (
+    <div css={styles.root}>
+      <Messages
+        channel={channel}
+        messages={messages}
+        onScrollDown={onScrollDown}
+        ref={listRef}
+      />
+      <MessageSend addMessage={addMessage} channel={channel} />
+      <Fab
+        color="primary"
+        aria-label="Latest messages"
+        css={[styles.fab, scrollDown || styles.fabDisabled]}
+        onClick={onClickScroll}
+      >
+        <ArrowDropDownIcon />
+      </Fab>
+    </div>
+  );
 }
-
-export default Main;

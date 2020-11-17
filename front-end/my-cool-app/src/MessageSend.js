@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { useTheme } from '@material-ui/core/styles';
 import { useState } from 'react'
 
+
 const useStyles = (theme) => {
   // See https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/OutlinedInput/OutlinedInput.js
   const borderColor = theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)';
@@ -68,6 +69,8 @@ const MessageSend = ({
             <Button
               variant="contained"
               color="primary"
+              size="large"
+              fullWidth="true"
               css={styles.send}
               endIcon={<SendIcon />}
               onClick={onSubmit}

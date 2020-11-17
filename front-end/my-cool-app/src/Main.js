@@ -17,7 +17,7 @@ const styles = {
   },
 }
 
-const localhost = "192.168.16.128" // = "localhost"
+const localhost = "localhost" // = "localhost"
 
 class Main extends React.Component{
   constructor(props){

@@ -3,19 +3,18 @@
 import { jsx } from '@emotion/core'
 import axios from 'axios';
 import React, { useState, useEffect, data } from 'react';
+import Link from '@material-ui/core/Link'
+import { useTheme } from '@material-ui/core/styles';
 
-const styles = {
+const useStyles = (theme) => ({
   channels: {
     minWidth: '200px',
-    backgroundColor: 'rgba(255,255,255,.1)',
-    borderStyle: 'inset',
+    backgroundColor: 'theme.palette.background',
     height: '100%',
-    '& ul': {
-      'margin': 0,
-      'padding': 0,
-      'textIndent': 0,
-      'listStyleType': 0,
-    },
+    margin: 0,
+    padding: 0,
+    textIndent: 0,
+    listStyleType: 0,
   },
   channel:{
     margin: '.2rem',
@@ -24,25 +23,23 @@ const styles = {
       backgroundColor: 'rgba(255,255,255,.1)',
     },
   },
+})
+
+export default ({
+  channels,setChannel
+}) => {
+  const styles = useStyles(useTheme())
+  return (
+    <ul style={styles.channels}>
+      { channels.map( (channel, i) => (
+        <li key={i} css={styles.channel}  onClick={ (e) => {
+          e.preventDefault()
+          setChannel(channel)} }>
+            <Link href="#" >
+              {channel.name}
+            </Link>
+        </li>
+      ))}
+    </ul>
+  );
 }
-
-class Channel extends React.Component{
-
-  render() {
-      return(
-        <div css={styles.channels}>
-          <p> Available channels: </p>
-          <ul>
-            {this.props.channels.map( (channel) => (
-              <li onClick={e => this.props.setChannel(channel)} key={channel.id} css={styles.channel}>
-                {channel.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-      );
-  }
-}
-
-export default Channel;

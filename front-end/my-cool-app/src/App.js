@@ -1,10 +1,12 @@
+import {useState} from 'react'
 import './App.css';
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import React from 'react';
-import Header from './Header'
+// Local
 import Footer from './Footer'
+import Header from './Header'
 import Main from './Main'
+import Login from './Login'
 
 const styles = {
   root: {
@@ -13,22 +15,18 @@ const styles = {
     flexDirection: 'column',
     backgroundColor: '#565E71',
     padding: '50px',
-  }
+  },
 }
 
-
-class App extends React.Component {
-  render() {
-    return (
-        <body>
-          <div className="App" css={styles.root}>
-            <Header />
-            <Main/>
-            <Footer />
-          </div>
-       </body>
-    );
-  }
+export default () => {
+  const [user, setUser] = useState(null)
+  return (
+    <div className="App" css={styles.root}>
+      <Header />
+      {
+        user ? <Main /> : <Login onUser={setUser} />
+      }
+      <Footer />
+    </div>
+  );
 }
-
-export default App;

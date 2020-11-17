@@ -1,17 +1,16 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
 import React from 'react';
-import moment from 'moment';
-import Prism from 'prismjs'
 import './App.css';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+import { useTheme } from '@material-ui/core/styles';
+// Markdown
+import unified from 'unified'
+import markdown from 'remark-parse'
+import remark2rehype from 'remark-rehype'
+import html from 'rehype-stringify'
 
-// The code snippet you want to highlight, as a string
-const code = `var data = 1;`;
-
-// Returns a highlighted HTML string
-const html = Prism.highlight(code, Prism.languages.javascript, 'javascript');
-
+/**
 const styles = {
   messages: {
     display : 'flex',
@@ -24,7 +23,6 @@ const styles = {
       'textIndent': 0,
       'listStyleType': 0,
     },
-    borderRightStyle: 'inset',
   },
   message: {
     margin: '.2rem',
@@ -34,27 +32,59 @@ const styles = {
       backgroundColor: 'rgba(255,255,255,.1)',
     },
   },
-}
+}**/
+
+const useStyles = (theme) => ({
+  root: {
+    position: 'relative',
+    flex: '1 1 auto',
+    overflow: 'auto',
+    '& ul': {
+      'margin': 0,
+      'padding': 0,
+      'textIndent': 0,
+      'listStyleType': 0,
+    },
+  },
+  messages: {
+    display : 'flex',
+    flexDirection : 'column-reverse',
+    flex: '1 1 auto',
+    height: '100%',
+    '& ul': {
+      'margin': 0,
+      'padding': 0,
+      'textIndent': 0,
+      'listStyleType': 0,
+    },
+  },
+  message: {
+    padding: '.2rem .5rem',
+    ':hover': {
+      backgroundColor: 'rgba(255,255,255,.05)',
+    },
+  },
+  fabWrapper: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '50px',
+  },
+  fab: {
+    position: 'fixed !important',
+    top: 0,
+    width: '50px',
+  },
+})
 
 class Messages extends React.Component{
-  componentDidMount() {
-    this.scrollToBottom();
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
-
-  scrollToBottom() {
-    this.el.scrollIntoView({ behavior: 'smooth' });
-  }
-
   render() {
+     const styles = useStyles(useTheme())
       return(
-        <div className="messages" css={styles.messages} ref={el => { this.el = el; }}>
+        <div className="messages" css={this.styles.messages}>
           <ul>
             {this.props.messages.map( (message, i) => (
-              <li key={i} css={styles.message}>
+              <li key={i} css={this.state.styles.message}>
                 <p><b>
                   <span>{message.author} : </span>
                   {' '}

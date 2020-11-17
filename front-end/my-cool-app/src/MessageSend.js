@@ -1,56 +1,82 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
+import Button from "@material-ui/core/Button"
+// import Icon from "@material-ui/core/Icon"
+import SendIcon from "@material-ui/icons/Send";
+import TextField from '@material-ui/core/TextField';
+import { useTheme } from '@material-ui/core/styles';
+import { useState } from 'react'
 
-const styles = {
-  form: {
-    borderTop: '2px solid #373B44',
-    padding: '.5rem',
-    display: 'flex',
-    background: 'rgba(255, 255, 255, 0.1)',
-    border: 'none',
-    borderRightStyle: 'inset',
-    borderBottomStyle: 'inset',
-    outline: 'none',
-  },
-  content: {
-    flex: '1 1 auto',
-    marginRight: '.5rem',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: 'none',
-    color: '#fff',
-    outline: 'none',
-  },
-  send: {
-    backgroundColor: '#D6DDEC',
-    padding: '.2rem .5rem',
-    border: 'none',
-    ':hover': {
-      backgroundColor: '#2A4B99',
-      cursor: 'pointer',
-      color: '#fff',
+const useStyles = (theme) => {
+  // See https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/OutlinedInput/OutlinedInput.js
+  const borderColor = theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)';
+  return {
+    form: {
+      borderTop: `2px solid ${borderColor}`,
+      padding: '.5rem',
+      display: 'flex',
+      background: 'rgba(255, 255, 255, 0.1)',
+      border: 'none',
+      outline: 'none',
     },
-  },
+    content: {
+      flex: '1 1 auto',
+      marginRight: '.5rem',
+      background: 'rgba(255, 255, 255, 0.03)',
+      border: 'none',
+      color: '#fff',
+      outline: 'none',
+      '&.MuiTextField-root': {
+        marginRight: theme.spacing(1),
+      },
+    },
+    send: {
+    },
+  }
 }
 
 const MessageSend = ({
   addMessage
   }) => {
+  const [content, setContent] = useState('')
+  const styles = useStyles(useTheme())
   const onSubmit = (e) => {
     e.preventDefault()
-    const data = new FormData(e.target)
     addMessage({
-      content: data.get('content'),
+      content: content,
       author: 'david',
       creation: Date.now(),
     })
-    e.target.elements.content.value = ''
-  } 
+    setContent('')
+  }
+  const handleChange = (e) => {
+    setContent(e.target.value)
+  }
   return (
-    <form css={styles.form}  onSubmit={onSubmit}>
-      <input type="input" name="content" css={styles.content} />
-      <input type="submit" value="Send" css={styles.send} />
-    </form>
+    <form css={styles.form} onSubmit={onSubmit} noValidate>
+          <TextField
+            id="outlined-multiline-flexible"
+            label="Message"
+            multiline
+            rowsMax={4}
+            value={content}
+            onChange={handleChange}
+            variant="outlined"
+            css={styles.content}
+          />
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              css={styles.send}
+              endIcon={<SendIcon />}
+              onClick={onSubmit}
+            >
+              Send
+            </Button>
+          </div>
+        </form>
   )
   }
-  
+
   export default MessageSend;

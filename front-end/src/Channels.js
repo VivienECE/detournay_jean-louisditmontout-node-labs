@@ -22,6 +22,7 @@ const useStyles = (theme) => ({
     ':hover': {
       backgroundColor: 'rgba(255,255,255,.1)',
     },
+    'list-style-type': 'none', 
   },
 })
 

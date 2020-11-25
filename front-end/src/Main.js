@@ -7,6 +7,9 @@ import Welcome from './Welcome'
 import React, { useState, useEffect, data, Component } from 'react';
 import axios from 'axios';
 import Hidden from '@material-ui/core/Hidden';
+import Drawer from '@material-ui/core/Drawer';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 
 const styles = {
   main: {
@@ -15,6 +18,13 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     overflow: 'hidden',
+  },
+    drawer: {
+    width: '200px',
+    display: 'none',
+  },
+  drawerVisible: {
+    display: 'block',
   },
 }
 
@@ -67,10 +77,19 @@ class Main extends React.Component{
   render() {
       return(
         <main className="App-main" css={styles.main}>
+           <Drawer
+            PaperProps={{ style: { position: 'relative' } }}
+            BackdropProps={{ style: { position: 'relative' } }}
+            ModalProps={{
+              style: { position: 'relative' }
+            }}
+            variant="persistent"
+            open={this.props.isDrawerVisible}
+            css={[styles.drawer, this.props.isDrawerVisible && styles.drawerVisible]}
+          >
+            <Channels channels= {this.state.channels} setChannel={this.setChannel}/>
+          </Drawer>
           {this.state.currentChannel ? <Channel messages = {this.state.messages} addMessage = {this.addMessage} channel={this.state.currentChannel}/> : <Welcome />}
-          <Hidden smDown>
-             <Channels channels= {this.state.channels} setChannel={this.setChannel}/>
-          </Hidden>
         </main>
       );
   }

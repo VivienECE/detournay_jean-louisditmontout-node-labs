@@ -10,13 +10,9 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+
 
 const styles = (theme) => ({
   header: {
@@ -35,23 +31,33 @@ const styles = (theme) => ({
   },
 })
 
-
-const Anchor = 'top' | 'left' | 'bottom' | 'right';
-
-export default () => { 
+export default ({
+  drawerToggleListener
+  }) => {
   
+  const handleDrawerToggle = (e) => {
+    drawerToggleListener()
+  }
+
 	return (
-      <header css={styles.header}>
-        <div css={styles.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" color ='primaryText' css={styles.title}>
-            Welcome
-          </Typography>
-          
-        </Toolbar>
-      </AppBar>
-    </div>
-      </header>
+    <header css={styles.header}>
+      <div css={styles.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              css={styles.menu}
+            >
+             <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" color ='primaryText' css={styles.title}>
+              Welcome
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </div>
+    </header>
   	);
 }

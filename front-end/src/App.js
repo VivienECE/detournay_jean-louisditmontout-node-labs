@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import './App.css';
 /** @jsx jsx */
+/** @jsxRuntime classic */
 import { jsx } from '@emotion/core'
 // Local
 import Footer from './Footer'

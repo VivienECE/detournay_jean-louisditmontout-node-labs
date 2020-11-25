@@ -1,5 +1,6 @@
+/** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from '@emotion/core'
+import { jsx } from '@emotion/core';
 import Channels from './Channels'
 import Channel from './Channel'
 import Welcome from './Welcome'

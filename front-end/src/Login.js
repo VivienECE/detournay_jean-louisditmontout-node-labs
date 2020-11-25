@@ -1,6 +1,7 @@
 import {} from 'react';
+/** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from '@emotion/core'
+import { jsx } from '@emotion/core';
 // Layout
 import { useTheme } from '@material-ui/core/styles';
 import {Button} from '@material-ui/core'

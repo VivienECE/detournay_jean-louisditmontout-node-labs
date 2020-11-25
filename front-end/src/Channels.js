@@ -1,6 +1,6 @@
+/** @jsxRuntime classic */
 /** @jsx jsx */
-
-import { jsx } from '@emotion/core'
+import { jsx } from '@emotion/core';
 import axios from 'axios';
 import React, { useState, useEffect, data } from 'react';
 import Link from '@material-ui/core/Link'

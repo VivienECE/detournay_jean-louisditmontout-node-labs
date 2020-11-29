@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import './App.css';
 /** @jsx jsx */
-/** @jsxRuntime classic */
 import { jsx } from '@emotion/core'
 // Local
 import Footer from './Footer'
@@ -22,7 +21,7 @@ const useStyles = (theme) => ({
 })
 
 export default () => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(true)
   const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)

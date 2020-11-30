@@ -1,4 +1,4 @@
-import {oauth, useEffect} from 'react';
+import {useEffect} from 'react';
 import {useCookies} from 'react-cookie'
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
@@ -91,6 +91,7 @@ const Tokens = ({
   const {id_token} = oauth
   const id_payload = id_token.split('.')[1]
   const {email} = JSON.parse(atob(id_payload))
+  const data = null;
   const logout = (e) => {
     e.stopPropagation()
     removeCookie('oath')
@@ -111,31 +112,34 @@ export default ({
   	authorization_endpoint:'http://127.0.0.1:5556/dex/auth',
   	token_endpoint: 'http://127.0.0.1:5556/dex/token',
   	client_id: 'example-app',
-  	redirect_uri: 'http://127.0.0.1:3000/callback',
+  	redirect_uri: 'http://127.0.0.1:3000',
   	scope: 'openid%20email%20offline_access',
   }
   const params = new URLSearchParams(window.location.search)
   const code = params.get('code')
 
   if(!code){
-    if(!cookies.oath){
+    if(!cookies.oauth){
+    	console.log("CREATE_TOKEN");
   	const codeVerifier = base64URLencode(crypto.randomBytes(32))
   	setCookie('code_Verifier', codeVerifier)
   	return(
   		<Redirect codeVerifier={codeVerifier} config={config} css={styles.root}/>
   	)
   }else{
+  console.log("TOKEN");
   	return(
-  		<Tokens ouath={cookies.oauth} css={styles.root}/>
+  		<Tokens oauth={cookies.oauth} css={styles.root}/>
   		)
   	}
   }
   else{
+  	console.log("FETCH");
   	const codeVerifier = cookies.code_Verifier
   	useEffect( ()=> {
   		const fetch = async () => {
   			try{
-  				const {data:oath} = await axios.post(
+  				const {data:oauth} = await axios.post(
             config.token_endpoint,
             qs.stringify ({
               grant_type: 'authorization_code',

@@ -30,8 +30,6 @@ const sha256 = (buffer) => {
     .digest()
 }
 
- 
-
 
 const useStyles = (theme) => ({
   root: {
@@ -89,7 +87,6 @@ const Redirect = ({
         <Button>
           <Link onClick={redirect}>Login with OpenID Connnect and OAuth</Link>
         </Button>
-          
       </div>
      )
  }
@@ -107,7 +104,7 @@ const Tokens = ({
   const data = null;
   const logout = (e) => {
     e.stopPropagation()
-    removeCookie('oauth')
+    removeCookie('oath')
   }
   return(
     <div css={styles.root}>
@@ -136,17 +133,17 @@ export default ({
   if(!code){
     if(!cookies.oauth){
         console.log("CREATE_TOKEN");
-        const codeVerifier = base64URLencode(crypto.randomBytes(32))
-        setCookie('code_Verifier', codeVerifier)
-        return(
-            <Redirect codeVerifier={codeVerifier} config={config} css={styles.root}/>
-        )
-    }else{
-          console.log("TOKEN");
-          return(
-              <Tokens oauth={cookies.oauth} css={styles.root}/>
-              )
-          }
+      const codeVerifier = base64URLencode(crypto.randomBytes(32))
+      setCookie('code_Verifier', codeVerifier)
+      return(
+          <Redirect codeVerifier={codeVerifier} config={config} css={styles.root}/>
+      )
+  }else{
+  console.log("TOKEN");
+      return(
+          <Tokens oauth={cookies.oauth} css={styles.root}/>
+          )
+      }
   }
   else{
       console.log("FETCH");
@@ -154,18 +151,19 @@ export default ({
       useEffect( ()=> {
           const fetch = async () => {
               try{
-                  const {data: oauth} = await axios.post(
-                  config.token_endpoint,
-                  qs.stringify ({
-                    grant_type: 'authorization_code',
-                    client_id: `${config.client_id}`,
-                    code_Verifier: `${codeVerifier}`,
-                    redirect_uri: `${config.redirect_uri}`,
-                    code: `${code}`,
-                  }))
+
+            const {data:oauth} = await axios.post(
+            config.token_endpoint,
+            qs.stringify ({
+              grant_type: 'authorization_code',
+              client_id: `${config.client_id}`,
+              code_verifier: `${codeVerifier}`,
+              redirect_uri: `${config.redirect_uri}`,
+              code: `${code}`,
+            }))
                   removeCookie('code_verifier')
-                  setCookie('oauth', oauth)
-                  window.location = '/'
+                  setCookie('oauth',oauth)
+                  window.location = '/?'
               }catch(err){
                   console.error(err)
               }

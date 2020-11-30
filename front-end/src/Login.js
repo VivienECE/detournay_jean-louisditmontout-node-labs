@@ -104,7 +104,7 @@ const Tokens = ({
   const data = null;
   const logout = (e) => {
     e.stopPropagation()
-    removeCookie('oath')
+    removeCookie('oauth')
   }
   return(
     <div css={styles.root}>
@@ -151,19 +151,18 @@ export default ({
       useEffect( ()=> {
           const fetch = async () => {
               try{
-
-            const {data:oauth} = await axios.post(
-            config.token_endpoint,
-            qs.stringify ({
-              grant_type: 'authorization_code',
-              client_id: `${config.client_id}`,
-              code_verifier: `${codeVerifier}`,
-              redirect_uri: `${config.redirect_uri}`,
-              code: `${code}`,
-            }))
-                  removeCookie('code_verifier')
-                  setCookie('oauth',oauth)
-                  window.location = '/?'
+                const {data:oauth} = await axios.post(
+                config.token_endpoint,
+                qs.stringify ({
+                  grant_type: 'authorization_code',
+                  client_id: `${config.client_id}`,
+                  code_verifier: `${codeVerifier}`,
+                  redirect_uri: `${config.redirect_uri}`,
+                  code: `${code}`,
+                }))
+                removeCookie('code_verifier')
+                setCookie('oauth',oauth)
+                window.location = '/'
               }catch(err){
                   console.error(err)
               }

@@ -72,7 +72,7 @@ const Redirect = ({
  			'respone_type=code&',
  			'redirect_uri='+config.redirect_uri+'&',
  			'code_challenge='+code_challenge+'&',	
- 			'code_challenge_method=256',
+ 			'code_challenge_method=S256',
  			].join('')
  		window.location = url
  	}

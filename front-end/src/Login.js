@@ -135,13 +135,14 @@ export default ({
   		const fetch = async () => {
   			try{
   				const {data:oath} = await axios.post(
-  					config.token_endpoint
-  				, qs.stringify ({
-            grant_type: 'authorization_code',
-            client_id: '${config.client_id}',
-            code_verifier: '${config.codeVerifier}',
-            redirect_uri: '${config.redirect_uri}',
-            code: '${code}',
+            config.token_endpoint,
+            qs.stringify ({
+              grant_type: 'authorization_code',
+              client_id: `${config.client_id}`,
+              redirect_uri: `${config.redirect_uri}`,
+              client_secret:'ZXhhbXBsZS1hcHAtc2VjcmV0',
+              code_verifier: `${config.codeVerifier}`,
+              code: `${code}`,
             }))
   				removeCookie('code_verifier')
   				setCookie('oauth',oauth)
@@ -164,7 +165,7 @@ export default ({
 	        </fieldset>
 	          <Button color="primary" variant='outlined' type="submit" value="login" onClick={ (e) => {
 	            e.stopPropagation()
-	            onUser({username: 'david'})
+	            onUser({username: 'clemencejldm'})
 	            }}>
 	            Login
 	          </Button>

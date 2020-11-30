@@ -78,14 +78,17 @@ const Redirect = ({
  	}
  	return(
       <div css={styles.root}>
-     	 <Link onClick={redirect} color="secondary">Login with OpenID Connnect and OAuth</Link>
+        <Button color="secondary">
+          <Link onClick={redirect}>Login with OpenID Connnect and OAuth</Link>
+        </Button>
+     	 
       </div>
  	)
  }
 
 const Tokens = ({
   oauth
- }) =>{
+ }) => {
   const [,,removeCookie] = useCookies([]);
   const styles = useStyles(useTheme())
   const {id_token} = oauth
@@ -111,7 +114,7 @@ export default ({
   	authorization_endpoint:'http://127.0.0.1:5556/dex/auth',
   	token_endpoint: 'http://127.0.0.1:5556/dex/token',
   	client_id: 'example-app',
-  	redirect_uri: 'http://127.0.0.1:3000/callback',
+  	redirect_uri: 'http://127.0.0.1:3000',
   	scope: 'openid%20email%20offline_access',
   }
   const params = new URLSearchParams(window.location.search)
@@ -124,18 +127,19 @@ export default ({
   	return(
   		<Redirect codeVerifier={codeVerifier} config={config} css={styles.root}/>
   	)
-  }else{
-  	return(
-  		<Tokens oauth={cookies.oauth} css={styles.root}/>
-  		)
-  	}
+    }
+    else{
+      return(
+        <Tokens oauth={cookies.oauth} css={styles.root}/>
+        )
+      }
   }
   else{
   	const codeVerifier = cookies.code_verifier
   	useEffect( ()=> {
   		const fetch = async () => {
   			try{
-  				const {data:oauth} = await axios.post(
+  				const {data: oauth} = await axios.post(
             config.token_endpoint,
             qs.stringify ({
               grant_type: 'authorization_code',
@@ -153,7 +157,7 @@ export default ({
   		}
   		fetch()
   	})
-	  return (
+	  return ( /*<div css={styles.root}>Loading tokens</div>*/
 	    <div css={styles.root}>
 	      <div >
 	        <form css={styles.form}>

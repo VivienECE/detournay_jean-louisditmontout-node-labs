@@ -66,13 +66,13 @@ const Redirect = ({
  		e.stopPropagation()
  		const code_challenge = base64URLencode(sha256(codeVerifier))
  		const url = [
- 			'$'+config.authorization_endpoint+'?',
- 			'client_id=$'+config.client_id+'&',
- 			'scope=$'+config.scope+'&',
+ 			config.authorization_endpoint+'?',
+ 			'client_id='+config.client_id+'&',
+ 			'scope='+config.scope+'&',
  			'respone_type=code&',
- 			'redirect_uri=$'+config.redirect_uri+'&',
- 			'code_challenge=$'+code_challenge+'&',	
- 			'code_challenge_method=$256',
+ 			'redirect_uri='+config.redirect_uri+'&',
+ 			'code_challenge='+code_challenge+'&',	
+ 			'code_challenge_method=256',
  			].join('')
  		window.location = url
  	}
@@ -139,7 +139,7 @@ export default ({
   				, qs.stringify ({
             grant_type: 'authorization_code',
             client_id: '${config.client_id}',
-            code_verifier: '${config.redirect_uri}',
+            code_verifier: '${config.codeVerifier}',
             redirect_uri: '${config.redirect_uri}',
             code: '${code}',
             }))

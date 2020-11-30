@@ -5,15 +5,15 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {ThemeProvider} from '@material-ui/core/styles';
 import theme from './theme';
-import { cookiesProvider } from 'react-cookie';
+import { CookiesProvider } from 'react-cookie';
 
 ReactDOM.render(
   <React.StrictMode>
-   <cookiesProvider>
+   <CookiesProvider>
 	    <ThemeProvider theme = {theme}>
 	      <App />
 	    </ThemeProvider>
-    </cookiesProvider>
+    </CookiesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

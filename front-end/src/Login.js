@@ -104,7 +104,8 @@ const Tokens = ({
   const data = null;
   const logout = (e) => {
     e.stopPropagation()
-    removeCookie('oath')
+    removeCookie('oauth')
+    window.location = '/?'
   }
   return(
     <div css={styles.root}>

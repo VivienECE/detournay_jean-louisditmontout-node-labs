@@ -69,7 +69,7 @@ const Redirect = ({
  			config.authorization_endpoint+'?',
  			'client_id='+config.client_id+'&',
  			'scope='+config.scope+'&',
- 			'respone_type=code&',
+ 			'response_type=code&',
  			'redirect_uri='+config.redirect_uri+'&',
  			'code_challenge='+code_challenge+'&',	
  			'code_challenge_method=S256',

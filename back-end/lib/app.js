@@ -7,6 +7,14 @@ const app = express()
 app.use(require('body-parser').json())
 app.use(cors())
 
+const authentification = (req, res, next) =>{
+  if(req.url === '/channels/a9a801a1-854c-4ba0-b3c7-7d37afab3a29/messages'){
+    res.send('401', 'User access token is not valid')
+  }else{
+    res.send('401', 'User access token is not valid')
+  }
+}
+
 app.get('/', (req, res) => {
   res.send([
     '<h1>ECE DevOps Chat</h1>'
@@ -15,26 +23,25 @@ app.get('/', (req, res) => {
 
 // Channels
 
-app.get('/channels', async (req, res) => {
+app.get('/channels', authentification, async (req, res) => {
   const channels = await db.channels.list()
   res.json(channels)
 })
 
-app.post('/channels', async (req, res) => {
+app.post('/channels', authentification, async (req, res) => {
   const channel = await db.channels.create(req.body)
   res.status(201).json(channel)
 })
 
-app.get('/channels/:id', async (req, res) => {
+app.get('/channels/:id', authentification, async (req, res) => {
   const channel = await db.channels.get(req.params.id)
   res.json(channel)
 })
 
-app.put('/channels/:id', async (req, res) => {
+app.put('/channels/:id', authentification, async (req, res) => {
   const channel = await db.channels.update(req.body)
   res.json(channel)
 })
-
 // Messages
 
 app.get('/channels/:id/messages', async (req, res) => {

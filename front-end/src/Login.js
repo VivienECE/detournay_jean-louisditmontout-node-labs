@@ -111,7 +111,7 @@ export default ({
   	authorization_endpoint:'http://127.0.0.1:5556/dex/auth',
   	token_endpoint: 'http://127.0.0.1:5556/dex/token',
   	client_id: 'example-app',
-  	redirect_uri: 'http://127.0.0.1:5555/callback',
+  	redirect_uri: 'http://127.0.0.1:3000/callback',
   	scope: 'openid%20email%20offline_access',
   }
   const params = new URLSearchParams(window.location.search)
@@ -129,7 +129,8 @@ export default ({
   		<Tokens ouath={cookies.oauth} css={styles.root}/>
   		)
   	}
-  }else{
+  }
+  else{
   	const codeVerifier = cookies.code_Verifier
   	useEffect( ()=> {
   		const fetch = async () => {
@@ -139,9 +140,8 @@ export default ({
             qs.stringify ({
               grant_type: 'authorization_code',
               client_id: `${config.client_id}`,
+              code_verifier: `${codeVerifier}`,
               redirect_uri: `${config.redirect_uri}`,
-              client_secret:'ZXhhbXBsZS1hcHAtc2VjcmV0',
-              code_verifier: `${config.codeVerifier}`,
               code: `${code}`,
             }))
   				removeCookie('code_verifier')

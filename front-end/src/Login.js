@@ -87,13 +87,13 @@ const Tokens = ({
   oauth
  }) =>{
   const [,,removeCookie] = useCookies([]);
-  const styles = useStyles(useTheme());
+  const styles = useStyles(useTheme())
   const {id_token} = oauth
   const id_payload = id_token.split('.')[1]
   const {email} = JSON.parse(atob(id_payload))
   const logout = (e) => {
     e.stopPropagation()
-    removeCookie('oath')
+    removeCookie('oauth')
   }
   return(
     <div css={styles.root}>
@@ -118,7 +118,7 @@ export default ({
   const code = params.get('code')
 
   if(!code){
-    if(!cookies.oath){
+    if(!cookies.oauth){
   	const codeVerifier = base64URLencode(crypto.randomBytes(32))
   	setCookie('code_Verifier', codeVerifier)
   	return(
@@ -126,16 +126,16 @@ export default ({
   	)
   }else{
   	return(
-  		<Tokens ouath={cookies.oauth} css={styles.root}/>
+  		<Tokens oauth={cookies.oauth} css={styles.root}/>
   		)
   	}
   }
   else{
-  	const codeVerifier = cookies.code_Verifier
+  	const codeVerifier = cookies.code_verifier
   	useEffect( ()=> {
   		const fetch = async () => {
   			try{
-  				const {data:oath} = await axios.post(
+  				const {data:oauth} = await axios.post(
             config.token_endpoint,
             qs.stringify ({
               grant_type: 'authorization_code',
@@ -145,7 +145,7 @@ export default ({
               code: `${code}`,
             }))
   				removeCookie('code_verifier')
-  				setCookie('oauth',oauth)
+  				setCookie('oauth', oauth)
   				window.location = '/'
   			}catch(err){
   				console.error(err)

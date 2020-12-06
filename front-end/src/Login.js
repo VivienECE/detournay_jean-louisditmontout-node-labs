@@ -12,7 +12,8 @@ import axios from 'axios';
 import qs from 'qs';
 import crypto from 'crypto';
 import Logo from "./icons/logo.png"
-
+import {Context} from './Context';
+import {useContext} from 'react';
  
 
 const base64URLencode = (str) =>  {
@@ -97,23 +98,24 @@ const Redirect = ({
  
 
 const Tokens = ({
-  oauth,
+  //oauth,
   css
  }) =>{
-  const [,,removeCookie] = useCookies([]);
+  const {oauth, setOauth} = useContext(Context)
   const styles = useStyles(useTheme());
+  const [,,removeCookie] = useCookies([]);
+  /*
   const {id_token} = oauth
   const id_payload = id_token.split('.')[1]
   const {email} = JSON.parse(atob(id_payload))
-  const data = null;
+  const data = null;*/
   const logout = (e) => {
     e.stopPropagation()
     removeCookie('oauth')
-    window.location = '/?'
   }
   return(
     <div css={styles.root}>
-    <h2>Welcome {email}</h2> <Link onClick={logout} color="secondary">logout</Link>
+    <h2>Welcome {oauth.email}</h2> <Link onClick={logout} color="secondary">logout</Link>
     </div>
   )
 }
@@ -145,12 +147,13 @@ export default ({
   }else{
   const styles = useStyles(useTheme());
       return(
-          <Tokens oauth={cookies.oauth} css={styles.root}/>
+          <Tokens css={styles.root}/>
           )
       }
   }
   else{
       const styles = useStyles(useTheme());
+      const {oauth, setOauth} = useContext(Context);
       const codeVerifier = cookies.code_Verifier
       useEffect( ()=> {
           const fetch = async () => {
@@ -186,7 +189,7 @@ export default ({
             </fieldset>
               <Button color="primary" variant='outlined' type="submit" value="login" onClick={ (e) => {
                 e.stopPropagation()
-                onUser({username: 'david'})
+                onUser({username : oauth.email})
                 }}>
                 Login
               </Button>

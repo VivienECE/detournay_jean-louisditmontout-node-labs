@@ -9,6 +9,9 @@ import Main from './Main'
 import Login from './Login'
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Context } from './Context';
+import {useContext} from 'react';
+
 
 const useStyles = (theme) => ({
   root: {
@@ -21,7 +24,7 @@ const useStyles = (theme) => ({
 })
 
 export default () => {
-  const [user, setUser] = useState(false)
+  const {oauth} = useContext(Context)
   const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)
@@ -35,7 +38,7 @@ export default () => {
     <div className="App" css={styles.root}>
       <Header drawerToggleListener={drawerToggleListener}/>
       {
-        user ? <Main drawerMobileVisible={drawerMobileVisible} isDrawerVisible={isDrawerVisible}/> : <Login onUser={setUser} />
+        oauth ? <Main drawerMobileVisible={drawerMobileVisible} isDrawerVisible={isDrawerVisible}/> : <Login />
       }
       <Footer />
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import ContextProvider from './Context';
 import * as serviceWorker from './serviceWorker';
 import {ThemeProvider} from '@material-ui/core/styles';
 import theme from './theme';
@@ -9,11 +10,13 @@ import { CookiesProvider } from 'react-cookie';
 
 ReactDOM.render(
   <React.StrictMode>
-   <CookiesProvider>
-	    <ThemeProvider theme = {theme}>
-	      <App />
-	    </ThemeProvider>
-    </CookiesProvider>
+    <ContextProvider>
+      <CookiesProvider>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </CookiesProvider>
+    </ContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

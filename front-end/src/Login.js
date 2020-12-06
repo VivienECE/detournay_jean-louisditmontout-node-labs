@@ -11,6 +11,7 @@ import Link from '@material-ui/core/Link';
 import axios from 'axios';
 import qs from 'qs';
 import crypto from 'crypto';
+import Logo from "./icons/logo.png"
 
  
 
@@ -67,7 +68,7 @@ const Redirect = ({
     config,
     codeVerifier,
 }) => {
-     const styles = useStyles(useTheme());
+     //const styles = useStyles(useTheme());
      const redirect = (e) => {
          e.stopPropagation()
          const code_challenge = base64URLencode(sha256(codeVerifier))
@@ -83,18 +84,21 @@ const Redirect = ({
          window.location = url
      }
      return(
-      <div css={styles.root}>
-        <Button>
-          <Link onClick={redirect}>Login with OpenID Connnect and OAuth</Link>
+      <div align="center">
+        <img  src={Logo} width="120" height="120" style={{borderRadius : 40}}></img>
+        <h1 style={{color:'#4db6ac'}}>ECE Chat</h1>
+        <Button variant="contained" color="secondary">
+          <Link onClick={redirect} style={{color:'white'}}>Login with OpenID Connnect and OAuth</Link>
         </Button>
-      </div>
+      </div> 
      )
  }
 
  
 
 const Tokens = ({
-  oauth
+  oauth,
+  css
  }) =>{
   const [,,removeCookie] = useCookies([]);
   const styles = useStyles(useTheme());
@@ -117,7 +121,7 @@ const Tokens = ({
 export default ({
   onUser
 }) => {
-  const styles = useStyles(useTheme());
+  //const styles = useStyles(useTheme());
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const config = {
       authorization_endpoint:'http://127.0.0.1:5556/dex/auth',
@@ -133,21 +137,20 @@ export default ({
 
   if(!code){
     if(!cookies.oauth){
-        console.log("CREATE_TOKEN");
       const codeVerifier = base64URLencode(crypto.randomBytes(32))
       setCookie('code_Verifier', codeVerifier)
       return(
-          <Redirect codeVerifier={codeVerifier} config={config} css={styles.root}/>
+          <Redirect codeVerifier={codeVerifier} config={config}/>
       )
   }else{
-  console.log("TOKEN");
+  const styles = useStyles(useTheme());
       return(
           <Tokens oauth={cookies.oauth} css={styles.root}/>
           )
       }
   }
   else{
-      console.log("FETCH");
+      const styles = useStyles(useTheme());
       const codeVerifier = cookies.code_Verifier
       useEffect( ()=> {
           const fetch = async () => {
@@ -173,6 +176,7 @@ export default ({
       return (
         <div css={styles.root}>
           <div >
+          <h1 style={{color:'#4db6ac'}}>ECE Chat</h1>
             <form css={styles.form}>
              <fieldset>
               <Input placeholder="Login"   id="username" inputProps={{ 'aria-label': 'description' }} color="primary" required/>
@@ -182,7 +186,7 @@ export default ({
             </fieldset>
               <Button color="primary" variant='outlined' type="submit" value="login" onClick={ (e) => {
                 e.stopPropagation()
-                onUser({username: 'clemencejldm'})
+                onUser({username: 'david'})
                 }}>
                 Login
               </Button>

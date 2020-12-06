@@ -40,5 +40,9 @@
     "develop": "bin/init && bin/start",
     "start": "bin/start",
     "test": "mocha 'test/**/*.js'"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
   }
 }

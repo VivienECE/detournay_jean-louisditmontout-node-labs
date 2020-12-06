@@ -6,8 +6,13 @@
   position: absolute;
   height: 100%;
   width: 100%;
+  background-image: url('./icons/background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /*background: deepOrange[50],
   background: -webkit-Linear-gradient(to left,#184d5d,#270c59);
-  background: Linear-gradient(to left,#184d5d,#270c59); 
+  background: Linear-gradient(to left,#184d5d,#270c59);*/ 
 }
 
 .messages{

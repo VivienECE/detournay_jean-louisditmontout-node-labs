@@ -52,8 +52,8 @@ export default ({
             >
              <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color ='primaryText' css={styles.title}>
-              Welcome
+            <Typography variant="h6" color ='textPrimary' css={styles.title}>
+              Welcome to ECE Chat
             </Typography>
           </Toolbar>
         </AppBar>

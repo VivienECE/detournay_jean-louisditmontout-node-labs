@@ -86,7 +86,7 @@ const Redirect = ({
      }
      return(
       <div align="center">
-        <img  src={Logo} width="120" height="120" style={{borderRadius : 40}}></img>
+        <img  src={Logo} width="120" height="120"></img>
         <h1 style={{color:'#4db6ac'}}>ECE Chat</h1>
         <Button variant="contained" color="secondary">
           <Link onClick={redirect} style={{color:'white'}}>Login with OpenID Connnect and OAuth</Link>

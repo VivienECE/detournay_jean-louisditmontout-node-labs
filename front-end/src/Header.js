@@ -17,6 +17,7 @@ import {useContext} from 'react';
 import Link from '@material-ui/core/Link';
 import Login from "./icons/login.png"
 import Logout from "./icons/logout.png"
+import Logo from "./icons/logo.png"
 
 const styles = (theme) => ({
   header: {
@@ -62,22 +63,15 @@ export default ({
       <div css={styles.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerToggle}
-              css={styles.menu}
-            >
-             <MenuIcon />
-            </IconButton>
+            <img src={Logo} width="5%" height="5%"></img>
             <Typography variant="h6" color ='textPrimary' css={styles.title}>
                 Welcome {oauth && oauth.email}
             </Typography>
-            <div >{
+            <div style={{position: 'absolute', right: 15}}>{
                 oauth ?
-                <Link on onClick ={onClickLogout} style={{color:'white'}}><img src={Logout} width="20" height="20" align="right"></img></Link>
+                <Link on onClick ={onClickLogout} style={{color:'white'}}><img src={Logout} width="30" height="30"></img></Link>
                 :
-                <Link on onClick ={onClickLogin}><img src={Login} width="20" height="20"></img></Link>
+                <Link on onClick ={onClickLogin}><img src={Login} width="30" height="30"></img></Link>
               }</div>
           </Toolbar>
         </AppBar>

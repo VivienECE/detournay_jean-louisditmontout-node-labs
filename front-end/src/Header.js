@@ -62,46 +62,58 @@ export default ({
     e.stopPropagation()
     setOauth(null)
   }
-  if(oauth)
+  if(oauth){
     var email = oauth.email
-  else
-  var email = 'none'
-  
+    /*Generate a md5-hash of a email address and return its hexadecimal value */
+    var hash = crypto.createHash('md5').update(email).digest("hex");
 
-/*Generate a md5-hash of a email address and return its hexadecimal value */
-var hash = crypto.createHash('md5').update(email).digest("hex");
+    /* Sends a GET request for the user profile */
+    request("https://www.gravatar.com/"+hash+".xml",function(err,response,body){
+      if (!err){
+        console.log(body);
+      }else{
+        console.log("Error: "+err);
+      }
+    })
 
-/* Sends a GET request for the user profile */
-request("https://www.gravatar.com/"+hash+".xml",function(err,response,body){
-	if (!err){
-		console.log(body);
-	}else{
-		console.log("Error: "+err);
-	}
-})
-
-const gravatar = "https://www.gravatar.com/avatar/" +hash+".jpg"
-
-	return (
-    <header css={styles.header}>
-      <div css={styles.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <img src={Logo} width="5%" height="5%"></img>
-            <Typography variant="h6" color ='textPrimary' css={styles.title}>
-                Welcome {oauth && oauth.email}
-            </Typography>
-            <div style={{position: 'absolute', right: '15px'}}>   
-                <img src={gravatar} width="40" height="40" style={{borderRadius: '50%', marginRight: '10px'}}></img>
-                { 
-                oauth ?
-                <Link on onClick ={onClickLogout}><img src={Logout} width="40" height="40"></img></Link>
-                :
-                <Link on onClick ={onClickLogin}><img src={Login} width="40" height="40"></img></Link>
-              }</div>
-          </Toolbar>
-        </AppBar>
-      </div>
-    </header>
-  	);
+    const gravatar = "https://www.gravatar.com/avatar/" +hash+".jpg"
+    
+    return (
+      <header css={styles.header}>
+        <div css={styles.root}>
+          <AppBar position="static">
+            <Toolbar>
+              <img src={Logo} width="5%" height="5%"></img>
+              <Typography variant="h6" color ='textPrimary' css={styles.title}>
+                  Welcome {oauth && oauth.email}
+              </Typography>
+              <div style={{position: 'absolute', right: '15px'}}>   
+                  <img src={gravatar} width="40" height="40" style={{borderRadius: '50%', marginRight: '10px'}}></img>
+                  <Link on onClick ={onClickLogout}><img src={Logout} width="40" height="40"></img></Link>
+              </div>
+            </Toolbar>
+          </AppBar>
+        </div>
+      </header>
+      );
+  }  
+  else{
+    return (
+      <header css={styles.header}>
+        <div css={styles.root}>
+          <AppBar position="static">
+            <Toolbar>
+              <img src={Logo} width="5%" height="5%"></img>
+              <Typography variant="h6" color ='textPrimary' css={styles.title}>
+                  Welcome !
+              </Typography>
+              <div style={{position: 'absolute', right: '15px'}}>
+                  <Link on onClick ={onClickLogin}><img src={Login} width="40" height="40"></img></Link>
+                </div>
+            </Toolbar>
+          </AppBar>
+        </div>
+      </header>
+      );
+  }
 }

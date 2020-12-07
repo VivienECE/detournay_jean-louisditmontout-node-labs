@@ -9,10 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import Channel from './icons/channel.png';
 import Friends from './icons/friends.png';
 import Settings from './icons/settings.png';
-/*
-import {ReactComponent as ChannelIcon} from './icons/channel.png';
-import {ReactComponent as FriendsIcon} from './icons/friends.png';
-import {ReactComponent as SettingsIcon} from './icons/settings.png';*/
 
 const useStyles = (theme) => ({
   root: {

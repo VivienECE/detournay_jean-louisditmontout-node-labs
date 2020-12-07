@@ -6,7 +6,7 @@ import ContextProvider from './Context';
 import * as serviceWorker from './serviceWorker';
 import {ThemeProvider} from '@material-ui/core/styles';
 import theme from './theme';
-import { CookiesProvider } from 'react-cookie';
+import {CookiesProvider} from 'react-cookie';
 
 ReactDOM.render(
   <React.StrictMode>

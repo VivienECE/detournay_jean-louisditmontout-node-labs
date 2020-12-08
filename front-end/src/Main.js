@@ -4,7 +4,8 @@ import { jsx } from '@emotion/core';
 import Channels from './Channels'
 import Channel from './Channel'
 import Welcome from './Welcome'
-import React, { useState, useEffect, data, Component } from 'react';
+import { Context } from './Context';
+import React, { useContext, useHistory, useState, useEffect, data, Component } from 'react';
 import axios from 'axios';
 import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
@@ -30,69 +31,71 @@ const styles = {
 
 const localhost = "localhost" // = "localhost"
 
-class Main extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = {
-      channels: [],
-      messages: [],
-      currentChannel:null,
-    }
-  }
-
-  async componentDidMount() {
-    fetch('http://'+localhost+':3001/channels')
-      .then(response => response.json())
-      .then((data) =>{
-        this.setState({
-          channels: data.map(channel => ({
-            name: channel.name,
-            id: channel.id,
-          }))
+export default () => {
+  const {
+    oauth, channels, setChannels, currentChannel, setCurrentChannel, messages, setMessages, isDrawerVisible
+  } = useContext(Context)
+  const history = useHistory();
+  useEffect( () => {
+    const fetch = async () => {
+      try{
+        const {data: channels} = await axios.get('http://localhost:3001/channels', {
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }
         })
-      });
-  }
+        setChannels(channels)
+      }catch(err){
+        console.error(err)
+      }
+    }
+    fetch()
+  }, [oauth, setChannels])
 
   //Actualise le channel lors de sa selection
-  setChannel = (newChannel) =>{
-    this.setState(state => ({ currentChannel: newChannel}));
-      axios.get('http://'+localhost+':3001/channels/'+newChannel.id+'/messages')
+  const setChannel = (newChannel) =>{
+      setCurrentChannel(newChannel)
+      axios.get('http://'+localhost+':3001/channels/'+newChannel.id+'/messages', {
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }
+        })
       .then((response) =>{
-        this.setState({messages:response.data})
+        setMessages(response.data)
       });
   }
 
   //Ajoute un message à la BD
-  addMessage = (message) => {
-    fetch('http://'+localhost+':3001/channels/'+this.state.currentChannel.id+'/messages', {
+  const addMessage = (message) => {
+    fetch('http://'+localhost+':3001/channels/'+currentChannel.id+'/messages', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         from: 'PostMessage',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+         headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          },
         body: JSON.stringify(message),
       })
       .then(response => response.json())
-    this.setChannel(this.state.currentChannel)
- }
-
-  render() {
-      return(
-        <main className="App-main" css={styles.main}>
-           <Drawer
-            PaperProps={{ style: { position: 'relative' } }}
-            BackdropProps={{ style: { position: 'relative' } }}
-            ModalProps={{
-              style: { position: 'relative' }
-            }}
-            variant="persistent"
-            open={this.props.isDrawerVisible}
-            css={[styles.drawer, this.props.isDrawerVisible && styles.drawerVisible]}
-          >
-            <Channels channels= {this.state.channels} setChannel={this.setChannel}/>
-          </Drawer>
-          {this.state.currentChannel ? <Channel messages = {this.state.messages} addMessage = {this.addMessage} channel={this.state.currentChannel}/> : <Welcome />}
-        </main>
-      );
+    setChannel(currentChannel)
   }
-}
 
-export default Main;
+ 
+    return(
+      <main className="App-main" css={styles.main}>
+         <Drawer
+          PaperProps={{ style: { position: 'relative' } }}
+          BackdropProps={{ style: { position: 'relative' } }}
+          ModalProps={{
+            style: { position: 'relative' }
+          }}
+          variant="persistent"
+          open={isDrawerVisible}
+          css={[styles.drawer, isDrawerVisible && styles.drawerVisible]}
+        >
+          <Channels channels= {channels} setChannel={setChannel}/>
+        </Drawer>
+        {currentChannel ? <Channel messages = {messages} addMessage = {addMessage} channel={currentChannel}/> : <Welcome />}
+      </main>
+    );
+  
+}

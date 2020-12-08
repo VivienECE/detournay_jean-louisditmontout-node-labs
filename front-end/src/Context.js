@@ -9,7 +9,9 @@ export default ({
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [oauth, setOauth] = useState(cookies.oauth)
   const [channels, setChannels] = useState([])
+  const [messages, setMessages] = useState([])
   const [currentChannel, setCurrentChannel] = useState(null)
+  const [drawerVisible, setDrawerVisible] = useState(false)
   return (
     <Context.Provider value={{
       oauth: oauth,

@@ -24,8 +24,7 @@ const useStyles = (theme) => ({
 })
 
 export default () => {
-  const {oauth} = useContext(Context)
-  const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
+  const {oauth, drawerMobileVisible, setDrawerMobileVisible} = useContext(Context)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)
   }

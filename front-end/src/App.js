@@ -9,7 +9,7 @@ import Main from './Main'
 import Login from './Login'
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { Context } from './Context';
+import Context from './Context'
 import {useContext} from 'react';
 
 

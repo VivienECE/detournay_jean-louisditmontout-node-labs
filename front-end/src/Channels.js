@@ -2,9 +2,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import axios from 'axios';
-import React, { useState, useEffect, data } from 'react';
+import React, { useContext, useState, useEffect, data } from 'react';
+import Context from './Context'
 import Link from '@material-ui/core/Link'
 import { useTheme } from '@material-ui/core/styles';
+import {useHistory} from 'react-router-dom'
 
 const useStyles = (theme) => ({
   channels: {
@@ -26,21 +28,44 @@ const useStyles = (theme) => ({
   },
 })
 
-export default ({
-  channels,setChannel
-}) => {
+export default () => {
+  const {
+    oauth,
+    channels, setChannels
+  } = useContext(Context)
+  const history = useHistory();
   const styles = useStyles(useTheme())
+  useEffect( () => {
+    const fetch = async () => {
+      try{
+        const {data: channels} = await axios.get('http://localhost:3001/channels', {
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }
+        })
+        setChannels(channels)
+      }catch(err){
+        console.error(err)
+      }
+    }
+    fetch()
+  }, [oauth, setChannels])
   return (
     <ul style={styles.channels}>
       { channels.map( (channel, i) => (
-        <li key={i} css={styles.channel}  onClick={ (e) => {
-          e.preventDefault()
-          setChannel(channel)} }>
-            <Link href="#" >
-              {channel.name}
-            </Link>
+        <li key={i} css={styles.channel}>
+          <Link
+            href={`/channels/${channel.id}`}
+            onClick={ (e) => {
+              e.preventDefault()
+              history.push(`/channels/${channel.id}`)
+            }}
+          >
+            {channel.name}
+          </Link>
         </li>
       ))}
     </ul>
   );
 }
+

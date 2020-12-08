@@ -34,6 +34,7 @@ const styles = (theme) => ({
   },
   title: {
     flexGrow: 1,
+    color:'#fafafa',
   },
 })
 
@@ -83,8 +84,8 @@ export default ({
         <div css={styles.root}>
           <AppBar position="static">
             <Toolbar>
-              <img src={Logo} width="5%" height="5%"></img>
-              <Typography variant="h6" color ='textPrimary' css={styles.title}>
+              <img src={Logo} width="40" height="40"></img>
+              <Typography variant="h6" style={{color:'#646e6e'}}>
                   Welcome {oauth && oauth.email}
               </Typography>
               <div style={{position: 'absolute', right: '15px'}}>   

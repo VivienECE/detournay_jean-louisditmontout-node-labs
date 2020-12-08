@@ -8,7 +8,7 @@ import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = (theme) => ({
   channels: {
-    minWidth: '200px',
+    minWidth: '300px',
     backgroundColor: '#f1f0ea',
     height: '100%',
     margin: 0,

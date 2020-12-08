@@ -1,19 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { CookiesProvider } from 'react-cookie';
 import './index.css';
 import App from './App';
-import ContextProvider from './Context';
+import { Provider as ContextProvider } from './Context';
 import * as serviceWorker from './serviceWorker';
-import {ThemeProvider} from '@material-ui/core/styles';
+// Layout
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
-import {CookiesProvider} from 'react-cookie';
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
     <ContextProvider>
       <CookiesProvider>
         <ThemeProvider theme={theme}>
-          <App />
+          <Router>
+            <App />
+          </Router>
         </ThemeProvider>
       </CookiesProvider>
     </ContextProvider>

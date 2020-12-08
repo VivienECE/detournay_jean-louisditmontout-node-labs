@@ -1,4 +1,4 @@
-import {useRef, useState} from 'react';
+import {useContext, useRef, useState} from 'react';
 import axios from 'axios';
 /** @jsxRuntime classic */
 /** @jsx jsx */
@@ -10,6 +10,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 // Local
 import Messages from './Messages'
 import MessageSend from './MessageSend'
+import Context from './Context'
+import { useHistory, useParams } from 'react-router-dom'
 
 const useStyles = (theme) => ({
   root: {
@@ -35,13 +37,35 @@ const useStyles = (theme) => ({
   }
 })
 
-export default ({
-  channel, messages, addMessage
-}) => {
+export default () => {
+  const history = useHistory()
+  const { id } = useParams()
+  const {channels} = useContext(Context)
+  const channel = channels.find( channel => channel.id === id)
+  if(!channel) {
+    history.push('/oups')
+    return <div/>
+  }
   const styles = useStyles(useTheme())
-  const listRef = useRef();
+  const listRef = useRef()
   const channelId = useRef()
+  const [messages, setMessages] = useState([])
   const [scrollDown, setScrollDown] = useState(false)
+  const addMessage = (message) => {
+    fetchMessages()
+  }
+  const fetchMessages = async () => {
+    setMessages([])
+    const {data: messages} = await axios.get(`http://localhost:3001/channels/${channel.id}/messages`)
+    setMessages(messages)
+    if(listRef.current){
+      listRef.current.scroll()
+    }
+  }
+  if(channelId.current !== channel.id){
+    fetchMessages()
+    channelId.current = channel.id
+  }
   const onScrollDown = (scrollDown) => {
     setScrollDown(scrollDown)
   }

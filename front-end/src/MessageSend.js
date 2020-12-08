@@ -6,7 +6,8 @@ import Button from "@material-ui/core/Button"
 import SendIcon from "@material-ui/icons/Send";
 import TextField from '@material-ui/core/TextField';
 import { useTheme } from '@material-ui/core/styles';
-import { useState } from 'react'
+import { useState } from 'react';
+import axios from 'axios';
 
 
 const useStyles = (theme) => {
@@ -38,17 +39,19 @@ const useStyles = (theme) => {
 }
 
 const MessageSend = ({
-  addMessage
+  addMessage,
+  channel,
   }) => {
   const [content, setContent] = useState('')
   const styles = useStyles(useTheme())
-  const onSubmit = (e) => {
-    e.preventDefault()
-    addMessage({
+  const onSubmit = async () => {
+    const {data: message} = await axios.post(
+      `http://localhost:3001/channels/${channel.id}/messages`
+    , {
       content: content,
       author: 'david',
-      creation: Date.now(),
     })
+    addMessage(message)
     setContent('')
   }
   const handleChange = (e) => {

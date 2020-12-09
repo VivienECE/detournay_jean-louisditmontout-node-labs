@@ -12,6 +12,7 @@ import {Button} from '@material-ui/core'
 import Input from '@material-ui/core/Input';
 // Local
 import Context from './Context'
+import Logo from './icons/logo.png';
 import {
   useHistory
 } from "react-router-dom";
@@ -37,6 +38,9 @@ const useStyles = (theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    '& Link':{
+      color:'#646e6e'
+    },
     '& > div': {
       margin: `${theme.spacing(1)}`,
       marginLeft: 'auto',
@@ -72,8 +76,11 @@ const Redirect = ({
     window.location = url
   }
   return (
-    <div css={styles.root}>
-      <Link onClick={redirect} color="secondary">Login with OpenID Connect and OAuth2</Link>
+    <div css={styles.root} style={{flexDirection: 'column'}}>
+      <img src={Logo} width="150" height="150"></img><br></br>
+      <Button variant='contained' color="secondary">
+        <Link onClick={redirect} style={{color:'#f1f0ea'}}>Login with OpenID Connect and OAuth2</Link>
+      </Button>
     </div>
   )
 }

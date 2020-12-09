@@ -13,6 +13,9 @@ import Input from '@material-ui/core/Input';
 import Modal from '@material-ui/core/Modal';
 import Settings from './Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import axios from 'axios';
+import Context from './Context'
+import {useContext} from 'react';
 
 const useStyles = (theme) => ({
   root: {
@@ -63,28 +66,46 @@ const useStyles = (theme) => ({
 
 export default () => {
   const styles = useStyles(useTheme())
-
+  const {oauth, setOauth} = useContext(Context)
   ///////////////////////////////////////////////////newChannel
   
   const [openC, setOpenC] = useState(false); 
-  
   const handleOpenC = () => { 
     setOpenC(true);
   };
-
   const handleCloseC = () => { 
     setOpenC(false);
   };
+  const [nameC, setName] = useState('')
+  const [friend, setFriend] = useState('')
+  const addChannel = async () => {
+    const {data: channels} = await axios.post(
+      `http://localhost:3001/channels`
+    , {
+      name: nameC,
+      owner: oauth.email,
+      friend: friend,
+    })
+    setName('')
+    setFriend('')
+    console.log(nameC)
+  }; 
+  const handleChange = (e) => {
+    setName(e.target.value)
+  }
+  const handleChangeF = (e) => {
+    setFriend(e.target.value)
+  }
 
   const newChannel = (
     <div align="center" css={styles.modal}>
       <h2>New channel</h2>
         <form> 
             <fieldset>
-              <Input placeholder="Channel's name"   id="name" inputProps={{ 'aria-label': 'description' }} color="primary" required/>
+              <Input placeholder="Channel's name" value={nameC} onChange={handleChange} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
             </fieldset>
             <fieldset>
-              <Input placeholder="Friend's email"  id="friend" inputProps={{ 'aria-label': 'description' }} color="primary" required/>
+              <Input placeholder="Friend's email"  value={friend} onChange={handleChangeF} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
             </fieldset>
             <fieldset>
               <Button onClick={handleCloseC}>
@@ -95,7 +116,7 @@ export default () => {
         <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={handleCloseC}>
             Cancel
         </Button>
-        <Button color="secondary" variant='contained' type="submit" >
+        <Button color="secondary" variant='contained' type="submit" onClick={addChannel}>
             Create
         </Button>
     </div> 

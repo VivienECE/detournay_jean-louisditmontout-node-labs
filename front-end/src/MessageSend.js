@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import { useTheme } from '@material-ui/core/styles';
 import { useState } from 'react';
 import axios from 'axios';
+import Context from './Context'
+import {useContext} from 'react';
 
 
 const useStyles = (theme) => {
@@ -15,7 +17,7 @@ const useStyles = (theme) => {
   const borderColor = theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)';
   return {
     form: {
-      borderTop: `2px solid ${borderColor}`,
+      borderTop: `2px solid #4db6ac`,
       padding: '.5rem',
       display: 'flex',
       background: 'rgba(255, 255, 255, 0.1)',
@@ -33,8 +35,6 @@ const useStyles = (theme) => {
         marginRight: theme.spacing(1),
       },
     },
-    send: {
-    },
   }
 }
 
@@ -43,13 +43,15 @@ const MessageSend = ({
   channel,
   }) => {
   const [content, setContent] = useState('')
+  const {oauth, setOauth} = useContext(Context)
+  var email = oauth.email
   const styles = useStyles(useTheme())
   const onSubmit = async () => {
     const {data: message} = await axios.post(
       `http://localhost:3001/channels/${channel.id}/messages`
     , {
       content: content,
-      author: 'david',
+      author: email,
     })
     addMessage(message)
     setContent('')
@@ -72,7 +74,7 @@ const MessageSend = ({
           <div>
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               size="large"
               fullWidth="true"
               css={styles.send}

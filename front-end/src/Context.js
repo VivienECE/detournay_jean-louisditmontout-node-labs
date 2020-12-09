@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie'
 
 const Context = React.createContext()
 
-export default Context
+export default Context;
 
 export const Provider = ({
   children

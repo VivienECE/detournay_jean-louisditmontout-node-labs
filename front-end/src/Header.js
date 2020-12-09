@@ -49,16 +49,16 @@ export default ({
   const handleDrawerToggle = (e) => {
     drawerToggleListener()
   }
-  const onClickLogin = (e) => {
+  /*const onClickLogin = (e) => {
     e.stopPropagation()
-  }
+    setOauth(oauth)
+  }*/
   const onClickLogout = (e) => {
     e.stopPropagation()
     setOauth(null)
   }
   if(oauth){
     var email = oauth.email
-    console.log(oauth.email)
     /*Generate a md5-hash of a email address and return its hexadecimal value */
     var hash = crypto.createHash('md5').update(email).digest("hex");
 
@@ -78,6 +78,14 @@ export default ({
         <div css={styles.root}>
           <AppBar position="static">
             <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              css={styles.menu}
+            >
+             <MenuIcon />
+            </IconButton>
               <img src={Logo} width="40" height="40"></img>
               <Typography variant="h6" style={{color:'#646e6e'}}>
                   Welcome {oauth && oauth.email}
@@ -102,9 +110,6 @@ export default ({
               <Typography variant="h6" color ='textPrimary' css={styles.title}>
                   Welcome !
               </Typography>
-              <div style={{position: 'absolute', right: '15px'}}>
-                  <Link on onClick ={onClickLogin}><img src={Login} width="40" height="40"></img></Link>
-                </div>
             </Toolbar>
           </AppBar>
         </div>

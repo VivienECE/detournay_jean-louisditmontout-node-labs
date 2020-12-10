@@ -47,12 +47,17 @@ const MessageSend = ({
   var email = oauth.email
   const styles = useStyles(useTheme())
   const onSubmit = async () => {
-    const {data: message} = await axios.post(
-      `http://localhost:3001/channels/${channel.id}/messages`
-    , {
-      content: content,
-      author: email,
-    })
+        const axiosdata = {
+	 content: content,
+         author: email
+	};
+
+	const config = {
+	  headers: {
+	       'Authorization': `Bearer ${oauth.access_token}`
+	  }
+	};
+    const {data: message} = await axios.post(`http://localhost:3001/channels/${channel.id}/messages`, axiosdata, config)
     addMessage(message)
     setContent('')
   }

@@ -7,7 +7,7 @@ import teal from '@material-ui/core/colors/teal';
 const theme = createMuiTheme({
     palette: {
       primary: {
-        main: deepOrange[300],
+        main: deepOrange[100],
       },
       secondary: {
         main: '#4db6ac',

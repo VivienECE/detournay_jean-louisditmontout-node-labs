@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 const styles = {
   footer: {
     height: '30px',
-    backgroundColor: 'rgba(255,138,101,.9)',
+    backgroundColor: 'rgba(255,204,188,.9)',
     flexShrink: 0,
     
   },
@@ -20,7 +20,7 @@ export default () => {
 	return (
       <footer css={styles.footer}>
         <div align="center"> 
-          <Typography color ='inherit'>
+          <Typography color ='secondary'>
           Nice to see you {oauth && oauth.email} !
         </Typography>
         </div>

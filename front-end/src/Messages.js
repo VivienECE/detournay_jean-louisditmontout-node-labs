@@ -116,53 +116,41 @@ export default forwardRef(({
 
   //Delete or modify a message
   const [openM, setOpenM] = useState(false); 
+  
   const handleOpenM = () => { 
     setOpenM(true);
   };
   const handleCloseM = () => { 
     setOpenM(false);
   };
-  
-  function Delete(message){
-    /*async () => {
-    await axios.del(`http://localhost:3001/channels/${channel.id}/messages/${message.creation}`)
-  }*/
-  console.log(message.content)
-  }; 
+  const [newM, setNewM] = useState('')
+  const handleChangeM = (e) => {
+    setNewM(e.target.value)
+  }
 
-  function Modify(message){
-    return(
-      <div align="center" css={styles.modal}>
-        <form> 
-          <fieldset>
-            <Input placeholder="New Message"  value= "newM" inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-          </fieldset>
-        </form>
-        <Button color="inhirit" variant='contained' type="submit" onClick={
-          /*async () => {
-          const {data: message} = await axios.put(`http://localhost:3001/channels/${channel.id}/messages/${message.creation}`,
-          {
-            content: {newM},
-          })
-          }*/ handleCloseM
-        }>
-            Modify
-        </Button>
-      </div>
-      
-    )
-    
-  }; 
-  
-  function updateM(message) {
+  function updateM(messageSelected) {
     return(
         <div align="center" css={styles.modal}>
-            <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={Delete(message)}>
+          <fieldset>
+            <Input placeholder="New Message"  onChange={handleChangeM} value={newM} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
+          </fieldset>
+            <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={async () => {
+             console.log('del message.js')
+             await axios.delete(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`)
+             console.log('del message.js done')
+              }}>
                 Delete
             </Button>
-            <Button color="inhirit" variant='contained' type="submit" onClick={Modify(message)}>
+            <Button color="inhirit" variant='contained' type="submit" onClick={async () => {
+              await axios.put(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`,{
+                content: newM,
+                author: oauth.email
+              })
+              setNewM('')
+              }}>
                 Modify
             </Button>
+            
         </div> 
     );
   } 

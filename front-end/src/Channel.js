@@ -16,6 +16,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {Button} from '@material-ui/core'
 import Input from '@material-ui/core/Input';
 import Modal from '@material-ui/core/Modal';
+import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from '@material-ui/icons/Delete';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 const useStyles = (theme) => ({
   root: {
@@ -78,6 +81,7 @@ export default () => {
     return <div/>
   }
   const styles = useStyles(useTheme())
+  const {oauth, setOauth} = useContext(Context)
   const listRef = useRef()
   const channelId = useRef()
   const [messages, setMessages] = useState([])
@@ -129,7 +133,7 @@ export default () => {
       <h2>Add a friend to your channel!</h2>
         <form> 
             <fieldset>
-              <Input placeholder="Friend's email"  id={friend} onChange={handleChange} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
+              <Input placeholder="Friend's email"  value={friend} onChange={handleChange} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
             </fieldset>
         </form>
         <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={handleCloseF}>
@@ -141,11 +145,81 @@ export default () => {
     </div> 
   );
 
+  //Modify channel name
+  const [openN, setOpenN] = useState(false); 
+  const handleOpenN = () => { 
+    setOpenN(true);
+  };
+  const handleCloseN = () => { 
+    setOpenN(false);
+  };
+  const [nameC, setName] = useState('')
+  const onSubmitN = async () => {
+      await axios.put(`http://localhost:3001/channels/${channel.id}`, {name: nameC})
+      setName('')
+  }
+  const handleChangeN = (e) => {
+    setName(e.target.value)
+  }
+  const modifyName = (
+    <div align="center" css={styles.modal}>
+      <h2>Change your channel's name!</h2>
+        <form> 
+            <fieldset>
+              <Input placeholder="New name"  value={nameC} onChange={handleChangeN} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
+            </fieldset>
+        </form>
+        <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={handleCloseN}>
+            Cancel
+        </Button>
+        <Button color="secondary" variant='contained' type="submit" onClick={onSubmitN}>
+            Change
+        </Button>
+    </div> 
+  );
+
+  //Delete channel
+  const [openDel, setOpenDel] = useState(false); 
+  const handleOpenDel = () => { 
+    setOpenDel(true);
+  };
+  const handleCloseDel = () => { 
+    setOpenDel(false);
+  };
+  const onSubmitDel = async () => {
+    await axios.delete(`http://localhost:3001/channels/${channel.id}`)
+    window.location.assign("http://localhost:3001/channels")
+  }
+  
+  const deleteChannel = (
+    <div align="center" css={styles.modal}>
+      <h2>Do you really want to delete this channel?</h2>
+        <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={handleCloseDel}>
+            Cancel
+        </Button>
+        <Button style={{backgroundColor:'red', color:'white'}} variant='contained' type="submit" onClick={onSubmitDel}>
+            Delete
+        </Button>
+    </div> 
+  );
+
   return (
     <div css={styles.root}>
       <div css={styles.top}>
+        <Button onClick={handleOpenDel} style={{ float: 'right' }}>
+          <DeleteIcon fontSize="small" style={{ color: '#fff3e0' }}/>
+        </Button>
+        <Modal open={openDel} onClose={handleCloseDel}>
+          {deleteChannel}
+        </Modal>
+        <Button onClick={handleOpenN} style={{ float: 'right' }}>
+          <CreateIcon fontSize="small" style={{ color: '#fff3e0' }}/>
+        </Button>
+        <Modal open={openN} onClose={handleCloseN}>
+          {modifyName}
+        </Modal>
         <Button onClick={handleOpenF} style={{ float: 'right' }}>
-          <AddCircleIcon fontSize="large" style={{ color: '#fff3e0' }}/>
+          <PersonAddIcon fontSize="small" style={{ color: '#fff3e0' }}/>
         </Button>
         <Modal open={openF} onClose={handleCloseF}>
           {newFriend}

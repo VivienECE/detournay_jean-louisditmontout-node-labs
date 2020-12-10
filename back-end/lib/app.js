@@ -37,8 +37,12 @@ app.get('/channels/:id', async (req, res) => {
 })
 
 app.put('/channels/:id', async (req, res) => {
-  const channel = await db.channels.update(req.body)
+  const channel = await db.channels.update(req.params.id, req.body)
   res.json(channel)
+})
+app.delete('/channels/:id', async (req, res) => {
+  await db.channels.delete(req.params.id, req.body)
+  res.status(200)
 })
 
 // Messages
@@ -53,14 +57,14 @@ app.post('/channels/:id/messages', async (req, res) => {
   res.status(201).json(message)
 })
 
-app.del('/channels/:id/messages/:creation', async (req, res) => {
-  const messages = await db.messages.delete()
-  res.status(201).json(messages)
+app.delete('/channels/:id/messages/:creation', async (req, res) => {
+  const messages = await db.messages.delete(req.params.creation, req.params.id)
+  res.status(200)
 })
 
 app.put('/channels/:id/messages/:creation', async (req, res) => {
-  const message = await db.messages.update()
-  res.json(message)
+  const message = await db.messages.update(req.params.creation, req.params.id, req.body)
+  res.status(200).json(message)
 })
 
 // Users

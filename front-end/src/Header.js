@@ -23,7 +23,8 @@ import Logo from "./icons/logo.png"
 const styles = (theme) => ({
   header: {
     height: '60px',
-    backgroundColor: 'rgba(255,255,255,.1)',
+    //backgroundColor: 'rgba(255,255,255,.1)',
+    //backgroundColor: 'linear-gradient(45deg,  #270c59 30%, #184d5d 90%)',
     borderStyle: 'inset',
   },
   root: {
@@ -49,10 +50,6 @@ export default ({
   const handleDrawerToggle = (e) => {
     drawerToggleListener()
   }
-  /*const onClickLogin = (e) => {
-    e.stopPropagation()
-    setOauth(oauth)
-  }*/
   const onClickLogout = (e) => {
     e.stopPropagation()
     setOauth(null)

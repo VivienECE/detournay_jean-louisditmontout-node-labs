@@ -9,13 +9,9 @@ module.exports = {
   channels: {
     create: async (channel) => {
       if(!channel.name) throw Error('Invalid channel')
-      if(!channel.owner) throw Error('Invalid message')
-      if(!channel.friend) throw Error('Invalid message')
       const id = uuid()
       await db.put(`channels:${id}`, JSON.stringify({
         name: channel.name,
-        owner: channel.owner,
-        friend:channel.friend,
       }
         ))
       return merge(channel, {id: id})
@@ -43,15 +39,13 @@ module.exports = {
         })
       })
     },
-    update: (id, channel) => {
-      const original = store.channels[id]
-      if(!original) throw Error('Unregistered channel id')
-      store.channels[id] = merge(original, channel)
+    update: async (id, channel) => {
+      await db.put(`channels:${id}`, JSON.stringify({
+       name: channel.name,
+      }))
     },
-    delete: (id, channel) => {
-      const original = store.channels[id]
-      if(!original) throw Error('Unregistered channel id')
-      delete store.channels[id]
+    delete: async (id) => {
+      await db.del(`channels:${id}`)
     }
   },
   messages: {
@@ -85,16 +79,15 @@ module.exports = {
         })
       })
     },
-    update: (message, creation) => {
-      const original = store.channelId.messages[message.creation]
-      if(!original) throw Error('Unregistered in this channel')
-      store.channelId.messages[message.creation] = merge(original, message)
+    update: async (creation, channelId, message) => {
+      await db.put(`messages:${channelId}:${creation}`, JSON.stringify({
+        author: message.author,
+        content: message.content
+    }))
     },
-    delete: (creation, channel, message) => {
-      const original = store.messages[message]
-      if(!original) throw Error('Unregistered channel id')
-      delete store.channelId.messages[message]
-    }
+    delete: async (creation, channelId) => {
+      await db.del(`messages:${channelId}:${creation}`)
+   }
   },
   users: {
     create: async (user) => {

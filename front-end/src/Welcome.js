@@ -33,7 +33,7 @@ const useStyles = (theme) => ({
     backgroundColor:'#f1f0ea',
     display: 'flex',
     position: 'relative',
-    top: '30%',
+    top: '10%',
     padding:'1em',
     display: 'table',
     textAlign : 'center',
@@ -77,24 +77,17 @@ export default () => {
     setOpenC(false);
   };
   const [nameC, setName] = useState('')
-  const [friend, setFriend] = useState('')
   const addChannel = async () => {
     const {data: channels} = await axios.post(
       `http://localhost:3001/channels`
     , {
       name: nameC,
-      owner: oauth.email,
-      friend: friend,
     })
     setName('')
-    setFriend('')
     console.log(nameC)
   }; 
   const handleChange = (e) => {
     setName(e.target.value)
-  }
-  const handleChangeF = (e) => {
-    setFriend(e.target.value)
   }
 
   const newChannel = (
@@ -103,14 +96,6 @@ export default () => {
         <form> 
             <fieldset>
               <Input placeholder="Channel's name" value={nameC} onChange={handleChange} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-            </fieldset>
-            <fieldset>
-              <Input placeholder="Friend's email"  value={friend} onChange={handleChangeF} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-            </fieldset>
-            <fieldset>
-              <Button onClick={handleCloseC}>
-                <AddCircleIcon/> Add another friend
-              </Button>    
             </fieldset>
         </form>
         <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={handleCloseC}>
@@ -121,20 +106,6 @@ export default () => {
         </Button>
     </div> 
   );
-
-  /*const addFriend = () =>{
-    return(
-    <div>
-      <fieldset>
-      <Input placeholder="Friend's email"  id="friend" inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-    </fieldset>
-    <fieldset>
-      <Button onClick={addFriend}>
-        <AddCircleIcon/> Add another friend
-      </Button>    
-    </fieldset>
-    </div>
-  )};*/
   
   ////////////////////////////////////////////newFriend
   
@@ -203,7 +174,7 @@ export default () => {
             <Button onClick={handleOpenC}>
             Create channel
             </Button>
-            <Modal open={openC} onClose={handleCloseC}>
+            <Modal open={openC} onClose={handleCloseC} style={{top: '20%'}}>
               {newChannel}
             </Modal>
           </div>
@@ -214,7 +185,7 @@ export default () => {
             <Button onClick= {handleOpenF}>
               Invite friends
             </Button>
-            <Modal open={openF} onClose={handleCloseF}>
+            <Modal open={openF} onClose={handleCloseF} style={{top: '20%'}}>
               {newFriend}
             </Modal>
           </div>

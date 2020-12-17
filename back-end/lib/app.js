@@ -89,4 +89,50 @@ app.put('/users/:id', async (req, res) => {
   res.json(user)
 })
 
+//Users in channel
+app.get('/channels/:id/users', async (req, res) => {
+  const users = await db.users.channellist(req.params.id)
+  res.json(users)
+  console.log(users)
+})
+
+app.post('/channels/:id/users', async (req, res) => {
+  const user = await db.users.channelcreate(req.params.id, req.body)
+  res.status(201).json(user)
+})
+
+app.delete('/channels/:id/users/:userId', async (req, res) => {
+  const users = await db.users.channeldelete(req.params.id, req.params.userId)
+  res.status(200)
+})
+
+app.put('/channels/:id/users/:userId', async (req, res) => {
+  const user = await db.users.channelupdate(req.params.id, req.params.userId, req.body)
+  res.status(200).json(user)
+})
+
+//Channel in user
+app.get('/users/:id/channels', async (req, res) => {
+  const channels = await db.channels.userlist(req.params.id)
+  res.json(channels)
+  console.log(channels)
+})
+
+app.post('/users/:id/channels', async (req, res) => {
+  console.log(channels)
+  console.log(req.params.id)
+  const channel = await db.channels.usercreate(req.params.id, req.body)
+  res.status(201).json(channel)
+})
+
+app.delete('/users/:id/channels/:channelId', async (req, res) => {
+  const channels = await db.channels.userdelete(req.params.id, req.params.channelId)
+  res.status(200)
+})
+
+app.put('/channels/:id/channels/:channelId', async (req, res) => {
+  const channel = await db.channels.userupdate(req.params.id, req.params.channelId, req.body)
+  res.status(200).json(user)
+})
+
 module.exports = app

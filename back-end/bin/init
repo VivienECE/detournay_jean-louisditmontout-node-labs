@@ -11,7 +11,7 @@ const config = {
   await Promise.all([{
     name: 'Channel 1',
     messages: [{
-      author: 'sergei',
+      author: 'vivien',
       creation: 1602831101929,
       content: `
       ## 1 - Architecture - Level easy
@@ -44,7 +44,7 @@ const config = {
       \`\`\`
       `.replace(/^ {6}/gm,''),
     },{
-      author: 'david',
+      author: 'clemence',
       creation: 1602832138892,
       content: `
       ## 2 - Styles - Level easy
@@ -54,7 +54,7 @@ const config = {
       with an icon, working on the header, providing day/night themes ... be creative
       `.replace(/^ {6}/gm,''),
     },{
-      author: 'sergei',
+      author: 'vivien',
       creation: 1602840139202,
       content: `
       ## 3 - Use an external library - Level medium
@@ -68,7 +68,7 @@ const config = {
       and act accordingly.
       `.replace(/^ {6}/gm,''),
     },{
-      author: 'david',
+      author: 'clemence',
       creation: 1602844139200,
       content: `
       ## 4 - Support message contents in Markdown - Level hard
@@ -85,11 +85,17 @@ const config = {
       Consider adding syntax highlight support with a library like
       [Prism](https://prismjs.com/).
       `.replace(/^ {6}/gm,'').replace(/^ {6}/gm,''),
+    }],
+    users: [{
+      email: "vivien.detournay@edu.ece.fr" ,
+      rang: "admin"},{
+      email: "clemence.jean-louis-dit-montout@gmail.fr",
+      rang: "membre"
     }]
   },{
     name: 'Channel 2',
     messages: [{
-      author: 'sergei',
+      author: 'vivien',
       creation: 1602223579200,
       content: `
       Ping
@@ -100,29 +106,82 @@ const config = {
       content: `
       Pong
       `.replace(/^ {6}/gm,'')
+    }],
+    users: [{
+      email: "david.worms@edu.ece.fr" ,
+      rang: "admin"},{
+      email: "vivien.detournay@edu.ece.fr",
+      rang: "membre"
     }]
   },{
     name: 'Channel 3',
     messages: [{
-      author: 'sergei',
+      author: 'david',
       creation: 1602223579200,
       content: `
       What is the answer to the Ultimate Question of Life, the Universe and Everything ?
       `.replace(/^ {6}/gm,'')
     },{
-      author: 'david',
+      author: 'clemence',
       creation: 1602523579200,
       content: `
       42
       `.replace(/^ {6}/gm,'')
+    }],
+    users: [{
+      email: "clemence.jean-louis-dit-montout@gmail.fr",
+      rang: "admin"},{
+      email: "david.worms@edu.ece.fr",
+      rang: "membre"
     }]
   }].map( async (channel) => {
     const {data: {id}} = await axios.post(`http://localhost:${config.port}/channels`, {
-      name: channel.name
+      name: channel.name,
+      users: channel.users
     })
-    return Promise.all( channel.messages.map( async (message) => {
-      await axios.post(`http://localhost:${config.port}/channels/${id}/messages`, message)
+   
+    return Promise.all( 
+      channel.messages.map( async (message) => {
+        await axios.post(`http://localhost:${config.port}/channels/${id}/messages`, message)
+      }),
+      channel.users.map( async (user) => {
+        await axios.post(`http://localhost:${config.port}/channels/${id}/users`, user)
+      }))
     }))
+  
+  await Promise.all([{
+    avatar: 'image.png',
+    firstname: 'Vivien',
+    lastname: 'DETOURNAY',
+    password: 'vivi',
+    email: 'vivien.detournay@edu.ece.fr',
+    birth: '02/12/1999'
+  },{
+    avatar: 'image.png',
+    firstname: 'Clemence',
+    lastname: 'JEAN-LOUIS DIT MONTOUT',
+    password: 'clemclem',
+    email: 'clemence.jean-louis-dit-montout@gmail.fr',
+    birth: '03/12/1999'
+  },{
+    avatar: 'image.png',
+    firstname: 'David',
+    lastname: 'WORMS',
+    password: 'worms',
+    email: 'david.worms@edu.ece.fr',
+    birth: '04/12/1987'
+
+  }].map( async (user) => {
+    const {data: {id}} = await axios.post(`http://localhost:${config.port}/users`, {
+      avatar: user.avatar,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      password: user.password,
+      email: user.email,
+      birth: user.birth
+    })
   }))
+
   process.exit()
 })();
+

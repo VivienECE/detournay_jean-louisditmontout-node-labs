@@ -6,7 +6,7 @@ const level = require('level')
 const db = level(__dirname + '/../db')
 
 module.exports = {
-  channels: {
+  channels: { //CHANNEL
     create: async (channel) => {
       if(!channel.name) throw Error('Invalid channel')
       const id = uuid()
@@ -46,9 +46,39 @@ module.exports = {
     },
     delete: async (id) => {
       await db.del(`channels:${id}`)
-    }
+    },
+    usercreate: async (userId, channel) => {         //USERS IN CHANNEL
+      console.log(channel)
+      if(!userId) throw Error('Invalid user')
+      if(!channel.id) throw Error('Invalid channelId')
+      await db.put(`userchannels:${userId}:${channel.id}`, JSON.stringify(channel))
+      return merge(channel, {userId: userId, channelId: channel.id})
+    },
+    userlist: async (channelId) => {
+      return new Promise( (resolve, reject) => {
+        const channels = []
+        db.createReadStream({
+          gt: `userchannels:${userId}:`,
+          lte: `userchannels:${userId}` + String.fromCharCode(":".charCodeAt(0) + 1),
+        }).on( 'data', ({key, value}) => {
+          channel = JSON.parse(value)
+          channel.id = key.split(':')[1]
+          channels.push(channel)
+        }).on( 'error', (err) => {
+          reject(err)
+        }).on( 'end', () => {
+          resolve(channels)
+        })
+      })
+    },
+    userupdate: async (userId, channel) => {
+      await db.put(`userchannels:${userId}:${channel.id}`, JSON.stringify(channel))
+    },
+    userdelete: async (userId, channelId) => {
+      await db.del(`userchannels:${userId}:${channelId}`)
+   }
   },
-  messages: {
+  messages: { //MESSAGES
     create: async (channelId, message) => {
       if(!channelId) throw Error('Invalid channel')
       if(!message.author) throw Error('Invalid message')
@@ -91,7 +121,7 @@ module.exports = {
   },
   users: {
     create: async (user) => {
-      if(!user.username) throw Error('Invalid user')
+      if(!user.email) throw Error('Invalid email')
       const id = uuid()
       await db.put(`users:${id}`, JSON.stringify(user))
       return merge(user, {id: id})
@@ -128,7 +158,37 @@ module.exports = {
       const original = store.users[id]
       if(!original) throw Error('Unregistered user id')
       delete store.users[id]
-    }
+    },
+    //USERS IN CHANNEL
+     channelcreate: async (channelId, user) => {
+      if(!channelId) throw Error('Invalid channel')
+      if(!user.email) throw Error('Invalid message')
+      await db.put(`channelusers:${channelId}:${user.id}`, JSON.stringify(user))
+      return merge(user, {channelId: channelId, userId: user.id})
+    },
+    channellist: async (channelId) => {
+      return new Promise( (resolve, reject) => {
+        const users = []
+        db.createReadStream({
+          gt: `channelusers:${channelId}:`,
+          lte: `channelusers:${channelId}` + String.fromCharCode(":".charCodeAt(0) + 1),
+        }).on( 'data', ({key, value}) => {
+          user = JSON.parse(value)
+          user.id = key.split(':')[1]
+          users.push(user)
+        }).on( 'error', (err) => {
+          reject(err)
+        }).on( 'end', () => {
+          resolve(users)
+        })
+      })
+    },
+    channelupdate: async (channelId, user) => {
+      await db.put(`channelusers:${channelId}:${user.id}`, JSON.stringify(user))
+    },
+    channeldelete: async (channelId, userId) => {
+      await db.del(`channelusers:${channelId}:${userId}`)
+   }
   },
   admin: {
     clear: async () => {

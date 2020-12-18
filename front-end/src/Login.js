@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import crypto from 'crypto'
 import qs from 'qs'
@@ -110,7 +110,8 @@ export default ({
   const styles = useStyles(useTheme())
   // const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies([]);
-  const {oauth, setOauth} = useContext(Context)
+  const {oauth, setOauth, currentUser, setCurrentUser} = useContext(Context)
+  const [users, setUsers] = useState([])
   const config = {
     authorization_endpoint: 'http://127.0.0.1:5556/dex/auth',
     token_endpoint: 'http://127.0.0.1:5556/dex/token',
@@ -135,6 +136,7 @@ export default ({
     }
   }else{ // yes: we are coming from an oauth server
     const codeVerifier = cookies.code_verifier
+
     useEffect( () => {
       const fetch = async () => {
         try {

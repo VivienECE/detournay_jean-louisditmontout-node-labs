@@ -33,7 +33,7 @@ const useStyles = (theme) => ({
     backgroundColor:'#f1f0ea',
     display: 'flex',
     position: 'relative',
-    top: '10%',
+    top: '0%',
     padding:'1em',
     display: 'table',
     textAlign : 'center',
@@ -84,7 +84,7 @@ export default () => {
       name: nameC,
     })
     setName('')
-    console.log(nameC)
+    setOpenC(false);
   }; 
   const handleChange = (e) => {
     setName(e.target.value)
@@ -118,6 +118,10 @@ export default () => {
   const handleCloseF = () => { 
     setOpenF(false);
   };
+  const invitation = () => {
+    //send email
+    setOpenF(false);
+  }
 
   const newFriend = (
     <div align="center" css={styles.modal}>
@@ -130,7 +134,7 @@ export default () => {
         <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={handleCloseF}>
             Cancel
         </Button>
-        <Button color="secondary" variant='contained' type="submit">
+        <Button color="secondary" variant='contained' type="submit" onClick={invitation}>
             Send invitation
         </Button>
     </div> 
@@ -151,9 +155,6 @@ export default () => {
   const settings = (
     <div align="center" css={styles.modal}>
         <Settings/>
-        <Button color="secondary" variant='contained' style={{right:'5'}} onClick={handleCloseS}>
-            Save 
-        </Button>
     </div> 
   );
 
@@ -174,7 +175,7 @@ export default () => {
             <Button onClick={handleOpenC}>
             Create channel
             </Button>
-            <Modal open={openC} onClose={handleCloseC} style={{top: '20%'}}>
+            <Modal open={openC} onClose={handleCloseC} style={{top: '30%'}}>
               {newChannel}
             </Modal>
           </div>
@@ -185,7 +186,7 @@ export default () => {
             <Button onClick= {handleOpenF}>
               Invite friends
             </Button>
-            <Modal open={openF} onClose={handleCloseF} style={{top: '20%'}}>
+            <Modal open={openF} onClose={handleCloseF} style={{top: '30%'}}>
               {newFriend}
             </Modal>
           </div>

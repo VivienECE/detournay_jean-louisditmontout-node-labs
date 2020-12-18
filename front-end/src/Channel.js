@@ -19,6 +19,7 @@ import Modal from '@material-ui/core/Modal';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import GroupIcon from '@material-ui/icons/Group';
 
 const useStyles = (theme) => ({
   root: {
@@ -32,7 +33,6 @@ const useStyles = (theme) => ({
   top:{
     textAlign: 'center',
     color:'#fff3e0',
-    //position: 'fixed',
     
   },
   fab: {
@@ -53,7 +53,6 @@ const useStyles = (theme) => ({
     display: 'table',
     textAlign : 'center',
     margin:'auto',
-    
     '& h2':{
       color:'rgba(255,138,101,.9)',
     },
@@ -72,6 +71,7 @@ const useStyles = (theme) => ({
 })
 
 export default () => {
+  
   const history = useHistory()
   const { id } = useParams()
   const {channels} = useContext(Context)
@@ -97,8 +97,19 @@ export default () => {
       listRef.current.scroll()
     }
   }
+  const [users, setUsers] = useState([])
+  /*const addUser = (user) => {
+    fetchUsers()
+  }*/
+  const fetchUsers = async () => {
+    setUsers([])
+    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`)
+    setUsers(users)
+  }
+
   if(channelId.current !== channel.id){
     fetchMessages()
+    fetchUsers()
     channelId.current = channel.id
   }
   const onScrollDown = (scrollDown) => {
@@ -118,12 +129,13 @@ export default () => {
   };
   const [friend, setFriend] = useState('')
   const onSubmit = async () => {
-    const {data: user} = await axios.put(
-      `http://localhost:3001/channels/${channel.id}`
-    , {
-      friend: friend,
+    await axios.put(`http://localhost:3001/channels/${channel.id}/user`, 
+    {
+      email: friend,
+      rang: "member"
     })
     setFriend('')
+    setOpenF(false);
   }
   const handleChange = (e) => {
     setFriend(e.target.value)
@@ -145,6 +157,31 @@ export default () => {
     </div> 
   );
 
+  //Show members
+  const [openMem, setOpenMem] = useState(false); 
+  const handleOpenMem = () => { 
+    setOpenMem(true);
+  };
+  const handleCloseMem = () => { 
+    setOpenMem(false);
+  };
+  const showMembers = (
+    <div align="center" css={styles.modal}>
+      <h2>Channel's members</h2>
+      <ul>
+        { users.map( (user, i) => {
+              return (
+              <li key={i} style={{ listStyleType:"none"}}>
+                  <p>
+                      <span>{user.email}</span>
+                      <span style={{color:'rgb(150,150,150)', fontSize:'10px'}}>  -  {user.rang}</span>
+                  </p>
+              </li>)
+            })}
+      </ul>
+    </div> 
+  );
+
   //Modify channel name
   const [openN, setOpenN] = useState(false); 
   const handleOpenN = () => { 
@@ -157,6 +194,7 @@ export default () => {
   const onSubmitN = async () => {
       await axios.put(`http://localhost:3001/channels/${channel.id}`, {name: nameC})
       setName('')
+      setOpenN(false);
   }
   const handleChangeN = (e) => {
     setName(e.target.value)
@@ -188,7 +226,8 @@ export default () => {
   };
   const onSubmitDel = async () => {
     await axios.delete(`http://localhost:3001/channels/${channel.id}`)
-    window.location.assign("http://localhost:3001/channels")
+    setOpenDel(false);
+    //window.location.assign("http://localhost:3001/channels")
   }
   
   const deleteChannel = (
@@ -217,6 +256,12 @@ export default () => {
         </Button>
         <Modal open={openN} onClose={handleCloseN}>
           {modifyName}
+        </Modal>
+        <Button onClick={handleOpenMem} style={{ float: 'right' }}>
+          <GroupIcon fontSize="small" style={{ color: '#fff3e0' }}/>
+        </Button>
+        <Modal open={openMem} onClose={handleCloseMem}>
+          {showMembers}
         </Modal>
         <Button onClick={handleOpenF} style={{ float: 'right' }}>
           <PersonAddIcon fontSize="small" style={{ color: '#fff3e0' }}/>

@@ -137,7 +137,7 @@ export default forwardRef(({
             <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={async () => {
              console.log('del message.js')
              await axios.delete(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`)
-             console.log('del message.js done')
+             setOpenM(false);
               }}>
                 Delete
             </Button>
@@ -147,6 +147,7 @@ export default forwardRef(({
                 author: oauth.email
               })
               setNewM('')
+              setOpenM(false);
               }}>
                 Modify
             </Button>

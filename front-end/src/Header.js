@@ -46,7 +46,7 @@ var request = require("request");
 export default ({
   drawerToggleListener
   }) => {
-  const {oauth, setOauth} = useContext(Context)
+  const {oauth, setOauth, currentUser, setCurrentUser} = useContext(Context)
   const handleDrawerToggle = (e) => {
     drawerToggleListener()
   }
@@ -54,8 +54,10 @@ export default ({
     e.stopPropagation()
     setOauth(null)
   }
-  if(oauth){
-    var email = oauth.email
+  if(!currentUser)
+    setCurrentUser(oauth)
+  if(currentUser){
+    var email = currentUser.email
     /*Generate a md5-hash of a email address and return its hexadecimal value */
     var hash = crypto.createHash('md5').update(email).digest("hex");
 

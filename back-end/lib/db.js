@@ -119,7 +119,7 @@ module.exports = {
       await db.del(`messages:${channelId}:${creation}`)
    }
   },
-  users: {
+  users: {//USERS
     create: async (user) => {
       if(!user.email) throw Error('Invalid email')
       const id = uuid()
@@ -163,6 +163,7 @@ module.exports = {
      channelcreate: async (channelId, user) => {
       if(!channelId) throw Error('Invalid channel')
       if(!user.email) throw Error('Invalid message')
+      if(!user.id) user.id = uuid()
       await db.put(`channelusers:${channelId}:${user.id}`, JSON.stringify(user))
       return merge(user, {channelId: channelId, userId: user.id})
     },

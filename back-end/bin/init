@@ -2,9 +2,24 @@
 
 const axios = require('axios')
 const app = require('../lib/app')
+var crypto = require("crypto");
+var request = require("request");
 const config = {
   port: 3001
 };
+
+function findGravatar(email){
+  var hash = crypto.createHash('md5').update(email).digest("hex");
+  request("https://www.gravatar.com/"+hash+".xml",function(err,response,body){
+    if (!err){
+      console.log(body);
+    }else{
+      console.log("Error: "+err);
+    }
+  })
+  gravatar = "https://www.gravatar.com/avatar/" +hash+".jpg"
+  return gravatar 
+}
 
 (async function() {
   await app.listen(config.port);
@@ -89,7 +104,7 @@ const config = {
     users: [{
       email: "vivien.detournay@edu.ece.fr" ,
       rang: "admin"},{
-      email: "clemence.jean-louis-dit-montout@gmail.fr",
+      email: "clemencejldm@gmail.com",
       rang: "membre"
     }]
   },{
@@ -110,7 +125,7 @@ const config = {
     users: [{
       email: "david.worms@edu.ece.fr" ,
       rang: "admin"},{
-      email: "vivien.detournay@edu.ece.fr",
+      email: "david@adaltas.com",
       rang: "membre"
     }]
   },{
@@ -129,9 +144,9 @@ const config = {
       `.replace(/^ {6}/gm,'')
     }],
     users: [{
-      email: "clemence.jean-louis-dit-montout@gmail.fr",
+      email: "clemencejldm@gmail.com",
       rang: "admin"},{
-      email: "david.worms@edu.ece.fr",
+      email: "david@adaltas.com",
       rang: "membre"
     }]
   }].map( async (channel) => {
@@ -150,26 +165,29 @@ const config = {
     }))
   
   await Promise.all([{
-    avatar: 'image.png',
     firstname: 'Vivien',
     lastname: 'DETOURNAY',
+    username: 'ViviD',
     password: 'vivi',
     email: 'vivien.detournay@edu.ece.fr',
-    birth: '02/12/1999'
+    birth: '02/12/1999',
+    avatar: findGravatar('vivien.detournay@edu.ece.fr')
   },{
-    avatar: 'image.png',
     firstname: 'Clemence',
     lastname: 'JEAN-LOUIS DIT MONTOUT',
+    username: 'Clemjldm',
     password: 'clemclem',
-    email: 'clemence.jean-louis-dit-montout@gmail.fr',
-    birth: '03/12/1999'
+    email: 'clemencejldm@gmail.com',
+    birth: '03/12/1999',
+    avatar: findGravatar('clemencejldm@gmail.com')
   },{
-    avatar: 'image.png',
     firstname: 'David',
     lastname: 'WORMS',
+    username: 'DavidW',
     password: 'worms',
-    email: 'david.worms@edu.ece.fr',
-    birth: '04/12/1987'
+    email: 'david@adaltas.com',
+    birth: '04/12/1987',
+    avatar: findGravatar('david@adaltas.com')
 
   }].map( async (user) => {
     const {data: {id}} = await axios.post(`http://localhost:${config.port}/users`, {

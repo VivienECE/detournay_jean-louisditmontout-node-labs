@@ -27,7 +27,9 @@ app.get('/channels', authenticate, async (req, res) => {
 })
 
 app.get('/filtredchannels', authenticate, async (req, res) => {
-  const channels = await db.channels.list(req.body.email)
+  console.log(req.body.email)
+  const channels = await db.channels.listfiltred(req.body.email)
+  console.log(channels)
   res.json(channels)
 })
 

@@ -54,9 +54,14 @@ export default ({
     e.stopPropagation()
     setOauth(null)
   }
-  if(!currentUser)
-    setCurrentUser(oauth)
-  if(currentUser){
+  var trying = 0
+  if(oauth && !currentUser && trying < 5)
+  {
+     setCurrentUser(oauth)
+     trying = trying + 1
+  }
+    
+  if(oauth && currentUser){
     var email = currentUser.email
     /*Generate a md5-hash of a email address and return its hexadecimal value */
     var hash = crypto.createHash('md5').update(email).digest("hex");

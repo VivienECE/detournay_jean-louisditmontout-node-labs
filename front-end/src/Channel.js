@@ -76,7 +76,8 @@ export default () => {
   const { id } = useParams()
   const styles = useStyles(useTheme())
   const {channels, oauth, setOauth} = useContext(Context)
-  const {listRef, channelId} = useRef()
+  const listRef = useRef()
+  const channelId = useRef()
   const [messages, setMessages] = useState([])
   const [scrollDown, setScrollDown] = useState(false)
 

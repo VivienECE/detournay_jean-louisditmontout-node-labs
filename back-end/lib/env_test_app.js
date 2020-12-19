@@ -27,8 +27,60 @@ app.get('/channels', async (req, res) => {
 })
 
 app.get('/filtredchannels', async (req, res) => {
-  const channels = await db.channels.list(req.body.email)
-  res.json(channels)
+
+  
+  const channelList = await db.channels.list()/**
+  const channels = await channelList.map( async (channel) => {
+      const users = await db.users.channellist(channel.id)
+      var user = 0
+      user = users.map((user) => {
+      	if(req.body.email === user.email){
+      		channels.push(channel)
+      		console.log("ADD")
+      		return channel
+      	}
+      })
+      if(user) return user
+    })**/
+    const channels = await channelList.map( async (channel) => {
+      const users = await db.users.channellist(channel.id)
+      const user = users.map((user) => {
+      	if(req.body.email === user.email){
+      	  channels.push(channel)
+      		console.log("ADD")
+      		
+      	}
+      })
+      console.log(channels)
+      return channels
+    }) 
+    
+    async function getChannels(channelList) {
+     return(await Promise.all(channels))
+  }
+   
+  res.json(await Promise.all(getChannels(channelList)))
+  
+  /**
+  const channelList = await db.channels.list()
+  let getChannel = async function (channel)
+  {
+  	getChannel.push(channel)
+  	return getChannel
+  }
+  const promises = channelList.map(async channel => {
+    const users = await db.users.channellist(channel.id)
+     const channels = users.map(async (user) => {
+      	if(req.body.email === user.email){
+      	   channels = await getChannel(channel)
+      	   console.log(channels)
+      	}
+      })
+      return channels
+  })
+  const results = await Promise.all(promises)
+  res.json(results)
+  **/
 })
 
 app.post('/channels', async (req, res) => {
@@ -98,14 +150,12 @@ app.put('/users/:id', async (req, res) => {
 app.get('/channels/:id/users', async (req, res) => {
   const users = await db.users.channellist(req.params.id)
   res.json(users)
-  console.log(users)
 })
 
 
 app.get('/channels/:channelId/users/:userId', async (req, res) => {
   const users = await db.users.channelget(req.params.channelId,req.params.userId)
   res.json(users)
-  console.log(users)
 })
 
 app.post('/channels/:id/users', async (req, res) => {

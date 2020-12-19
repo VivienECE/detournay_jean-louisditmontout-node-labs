@@ -39,9 +39,10 @@ module.exports = {
         })
       })
     },
-    listfiltred: async (email) => {
-       return new Promise( (resolve, reject)  => {
+    listfiltred: async (currentUser) => {
         const channels = []
+        const users = []
+        return new Promise( (resolve, reject) => {
         db.createReadStream({
           gt: "channels:",
           lte: "channels" + String.fromCharCode(":".charCodeAt(0) + 1),
@@ -54,16 +55,14 @@ module.exports = {
         }).on( 'data', ({key, value}) => {
           user = JSON.parse(value)
           user.id = key.split(':')[1]
-          console.log(email)
-          if(user.email == email) channels.push(channel)
+          if(currentUser.email = user.email) channels.push(channel)
+        }).on( 'error', (err) => {
+          reject(err)
+        }).on( 'end', () => {})
         }).on( 'error', (err) => {
           reject(err)
         }).on( 'end', () => {
-        })
-        }).on( 'error', (err) => {
-          reject(err)
-        }).on( 'end', () => {
-          resolve(channels)
+       	 resolve(channels)
         })
       })
     },
@@ -162,7 +161,6 @@ module.exports = {
       if(!channelId) throw Error('Invalid channel')
       if(!user.email) throw Error('Invalid message')
       user.id = uuid()
-      console.log(`channelusers:${channelId}:${user.id}`)
       await db.put(`channelusers:${channelId}:${user.id}`, JSON.stringify(user))
       return merge(user, {channelId: channelId, userId: user.id})
     },

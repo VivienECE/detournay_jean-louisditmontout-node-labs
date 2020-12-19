@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import Context  from './Context';
-import React,{useContext} from 'react';
+import {useContext} from 'react';
 import Typography from '@material-ui/core/Typography';
 import {useState} from 'react';
 import Switch from '@material-ui/core/Switch';
@@ -21,7 +21,6 @@ import a6 from './icons/a6.png';
 import a7 from './icons/a7.png';
 import a8 from './icons/a8.png';
 import ImageUploader from 'react-images-upload';
-import FileSystem from 'file-system';
 
 
 const styles = {
@@ -48,7 +47,7 @@ const styles = {
     //backgroundColor:'#f1f0ea',
     display: 'flex',
     position: 'relative',
-    top: '40%',
+    top: '0%',
     padding:'1em',
     display: 'table',
     textAlign : 'center',
@@ -59,42 +58,14 @@ const styles = {
   }, 
 }
 
-class UploadImage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { pictures: [] };
-    this.onDrop = this.onDrop.bind(this);
-  }
-
-  onDrop(pictureFiles, pictureDataURLs) {
-    this.props.setAvatar(pictureFiles)
-    this.setState({
-      pictures: pictureFiles
-    });
-  }
-  render() {
-    return (
-      <ImageUploader
-        withPreview={true}
-        withIcon={true}
-        buttonText="Choose images"
-        onChange={this.onDrop}
-        imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-        maxFileSize={5242880}
-      />
-    );
-  }
-}
-
-
-const Settings = () => { 
-  const {oauth, currentUser, setCurrentUser} = useContext(Context)
-  if(!currentUser)
-    setCurrentUser(oauth)
+var crypto = require("crypto");
+var request = require("request");
+const CreateUser = () => { 
+  //const {oauth, currentUser, setCurrentUser} = useContext(Context)
+  //if(!currentUser)
+    //setCurrentUser(oauth)
   
-  const [avatar, setAvatar] = useState(currentUser.avatar)
-  
-
+  const [avatar, setAvatar] = useState('')
   const [openAv, setOpenAv] = useState(false); 
   const handleOpenAv = () => { 
     setOpenAv(true);
@@ -107,27 +78,39 @@ const Settings = () => {
     setAvatar(e.target.src)
     setOpenAv(false);
   }
-  const onDropUpload = async (e, picture) =>{
-    console.log(picture)
-    console.log(picture[0].name)
-    /*let cameraImageUri = '';
-    if (picture) {
-      const fileName = picture[0].name.split('/').pop();
-      cameraImageUri = FileSystem.documentDirectory + fileName;
-      try {
-        await FileSystem.moveAsync({ from: picture[0].name, to: './icons' });
-      } catch (err) {
-        throw new Error(err);
-      }
-    }*/
-    setAvatar(e.target.pictureFiles)
+  const onDropUpload = picture =>{
+    setAvatar(picture)
     setOpenAv(false);
+  }
+
+  function findGravatar(email){
+    var hash = crypto.createHash('md5').update(email).digest("hex");
+    request("https://www.gravatar.com/"+hash+".xml",function(err,response,body){
+      if (!err){
+        console.log(body);
+      }else{
+        console.log("Error: "+err);
+      }
+    })
+    let gravatar = "https://www.gravatar.com/avatar/" +hash+".jpg"
+    return gravatar 
   }
     
 
   const changeAvatar = (
   <div style={{backgroundColor:'#f1f0ea', margin: '20px'}}>
-    <UploadImage setAvatar={setAvatar} />
+    <ImageUploader
+        withIcon={true}
+        buttonText='Upload your image here'
+        onChange={onDropUpload}
+        imgExtension={['.jpg', '.png']}
+        maxFileSize={5242880}
+    />
+    <p>or</p>
+    <Button variant='contained' color="secondary" onClick={async () => {
+      setAvatar(findGravatar(email))
+      setOpenAv(false);
+    }}>Use my gravatar</Button>
     <p> or choose one below</p>
     <Grid
       container
@@ -188,60 +171,35 @@ const Settings = () => {
 </div>
 )
 //Firstname
-  const [firstname, setFirstname] = useState(currentUser.firstname)
-  const onSubmitFirstname = async () => {
-      setFirstname('')
-  }
+  const [firstname, setFirstname] = useState('')
   const handleChangeFirstname = (e) => {
     setFirstname(e.target.value)
   }
 
 //Lastname
-  const [lastname, setLastname] = useState(currentUser.lastname)
-  const onSubmitLastname = async () => {
-      setLastname('')
-  }
+  const [lastname, setLastname] = useState('')
   const handleChangeLastname = (e) => {
     setLastname(e.target.value)
   }
 
 //username
-const [username, setUsername] = useState(currentUser.username)
-  const onSubmitU = async () => {
-      setUsername('')
-  }
+const [username, setUsername] = useState('')
   const handleChangeU = (e) => {
     setUsername(e.target.value)
   }
 //email
-const [email, setEmail] = useState(currentUser.email)
-  const onSubmitE = async () => {
-      setEmail('')
-  }
+const [email, setEmail] = useState('')
   const handleChangeE = (e) => {
     setEmail(e.target.value)
   }
 //birth
-  const [birth, setBirth] = useState(currentUser.birth)
-  const onSubmitB = async () => {
-      setBirth('')
-  }
+  const [birth, setBirth] = useState('')
   const handleChangeB = (e) => {
     setBirth(e.target.value)
   }
-
-  //darkMode
-  const [state, setState] = useState({
-    darkMode: false,
-  });
-
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
-
 //save all fields
   const Save = async () => {
-    await axios.put(`http://localhost:3001/users/${currentUser.id}`, {
+    await axios.post(`http://localhost:3001/users/`, {
       avatar: avatar,
       firstname: firstname,
       lastname: lastname,
@@ -253,7 +211,7 @@ const [email, setEmail] = useState(currentUser.email)
 
 	return (
     <div css={styles.root}>
-      <h1 align="center">Settings</h1><br/>
+      <h1 align="center">Create a new account</h1><br/>
           <form>
             <img src={avatar} onClick={handleOpenAv} width="150" height="150" style={{borderRadius: '50%', marginRight: '10px'}}></img>
               <Modal open={openAv} onClose={handleCloseAv} style={styles.modal}>
@@ -262,37 +220,22 @@ const [email, setEmail] = useState(currentUser.email)
             <fieldset>
               Firstname  
               <Input value={firstname} onChange={handleChangeFirstname} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-              <Button onClick={onSubmitFirstname}>
-                <CreateIcon fontSize="small" style={{ color: 'grey' }}/>
-              </Button>
             </fieldset>
             <fieldset>
               Lastname  
               <Input value={lastname} onChange={handleChangeLastname} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-              <Button onClick={onSubmitLastname}>
-                <CreateIcon fontSize="small" style={{ color: 'grey' }}/>
-              </Button>
             </fieldset>
             <fieldset>
               Username  
               <Input value={username} onChange={handleChangeU} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-              <Button onClick={onSubmitU}>
-                <CreateIcon fontSize="small" style={{ color: 'grey' }}/>
-              </Button>
             </fieldset>
             <fieldset>
               Email  
               <Input value={email} type='email' onChange={handleChangeE} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-              <Button onClick={onSubmitE}>
-                <CreateIcon fontSize="small" style={{ color: 'grey' }}/>
-              </Button>
             </fieldset>
             <fieldset>
               Date of birth  
               <Input value={birth} width='100px' type='date'  onChange={handleChangeB} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
-              <Button onClick={onSubmitB}>
-                <CreateIcon fontSize="small" style={{ color: 'grey' }}/>
-              </Button>
             </fieldset>
           </form>
         <Button color='secondary' variant='contained' style={{ float: 'right' }} onClick={Save}>Save</Button>
@@ -300,4 +243,4 @@ const [email, setEmail] = useState(currentUser.email)
   	)
 }
 
-export default Settings;
+export default CreateUser;

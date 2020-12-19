@@ -16,6 +16,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import axios from 'axios';
 import Context from './Context'
 import {useContext} from 'react';
+import{ init, emailjs } from 'emailjs-com';
+
+
 
 const useStyles = (theme) => ({
   root: {
@@ -66,7 +69,10 @@ const useStyles = (theme) => ({
 
 export default () => {
   const styles = useStyles(useTheme())
-  const {oauth, setOauth} = useContext(Context)
+  const {oauth, setOauth, currentUser, setCurrentUser} = useContext(Context)
+  if(!currentUser)
+    setCurrentUser(oauth)
+
   ///////////////////////////////////////////////////newChannel
   
   const [openC, setOpenC] = useState(false); 
@@ -110,6 +116,10 @@ export default () => {
   ////////////////////////////////////////////newFriend
   
   const [openF, setOpenF] = useState(false); 
+  const [emailFriend, setEmailFriend] = useState('')
+  const handleChangeF = (e) => {
+    setEmailFriend(e.target.value)
+  }
   
   const handleOpenF = () => { 
     setOpenF(true);
@@ -119,7 +129,18 @@ export default () => {
     setOpenF(false);
   };
   const invitation = () => {
-    //send email
+    init("user_UhKBebzwLHD2UQoxIrDOV");
+    var templateParams = {
+      email: emailFriend,
+      username: currentUser.username
+    };
+   
+  emailjs.send('service_9rowkhs', 'template_1cif23p', templateParams)
+      .then(function(response) {
+         console.log('SUCCESS!', response.status, response.text);
+      }, function(error) {
+         console.log('FAILED...', error);
+      });
     setOpenF(false);
   }
 
@@ -128,7 +149,7 @@ export default () => {
       <h2>Invite your friend !</h2>
         <form> 
             <fieldset>
-              <Input placeholder="Friend's email"  id="friend" inputProps={{ 'aria-label': 'description' }} color="primary" required/>
+              <Input placeholder="Friend's email"  value={emailFriend} onChange={handleChangeF} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
             </fieldset>
         </form>
         <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={handleCloseF}>

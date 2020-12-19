@@ -149,15 +149,19 @@ module.exports = {
         })
       })
     },
-    update: (id, user) => {
-      const original = store.users[id]
-      if(!original) throw Error('Unregistered user id')
-      store.users[id] = merge(original, user)
+    update: async (id, user) => {
+      await db.put(`users:${id}`, JSON.stringify({
+        avatar: user.avatar,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        birth: user.birth
+       }))
     },
-    delete: (id, user) => {
-      const original = store.users[id]
-      if(!original) throw Error('Unregistered user id')
-      delete store.users[id]
+    delete: async (id) => {
+      await db.del(`users:${id}`)
     },
     //USERS IN CHANNEL
      channelcreate: async (channelId, user) => {

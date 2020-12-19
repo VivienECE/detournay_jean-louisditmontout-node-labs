@@ -170,7 +170,7 @@ function findGravatar(email){
     username: 'ViviD',
     password: 'vivi',
     email: 'vivien.detournay@edu.ece.fr',
-    birth: '02/12/1999',
+    birth: new Date(1999, 02, 12),
     avatar: findGravatar('vivien.detournay@edu.ece.fr')
   },{
     firstname: 'Clemence',
@@ -178,7 +178,7 @@ function findGravatar(email){
     username: 'Clemjldm',
     password: 'clemclem',
     email: 'clemencejldm@gmail.com',
-    birth: '03/12/1999',
+    birth: new Date(1999, 03, 12),
     avatar: findGravatar('clemencejldm@gmail.com')
   },{
     firstname: 'David',
@@ -186,7 +186,7 @@ function findGravatar(email){
     username: 'DavidW',
     password: 'worms',
     email: 'david@adaltas.com',
-    birth: '04/12/1987',
+    birth: new Date(1987, 04, 12),
     avatar: findGravatar('david@adaltas.com')
 
   }].map( async (user) => {
@@ -194,6 +194,7 @@ function findGravatar(email){
       avatar: user.avatar,
       firstname: user.firstname,
       lastname: user.lastname,
+      username: user.username,
       password: user.password,
       email: user.email,
       birth: user.birth

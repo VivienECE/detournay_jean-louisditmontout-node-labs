@@ -19,8 +19,10 @@ import Link from '@material-ui/core/Link';
 import Login from "./icons/login.png"
 import Logout from "./icons/logout.png"
 import Logo from "./icons/logo.png"
+import Modal from '@material-ui/core/Modal';
+import Settings from './Settings';
 
-const styles = (theme) => ({
+const useStyles = (theme) => ({
   header: {
     height: '60px',
     //backgroundColor: 'rgba(255,255,255,.1)',
@@ -37,11 +39,32 @@ const styles = (theme) => ({
     flexGrow: 1,
     color:'#fafafa',
   },
+  modal:{
+    border: 'none',
+    backgroundColor:'#f1f0ea',
+    display: 'flex',
+    position: 'relative',
+    top: '0%',
+    padding:'1em',
+    display: 'table',
+    textAlign : 'center',
+    margin:'auto',
+    '& h2':{
+      color:'rgba(255,138,101,.9)',
+    },
+    '& form':{
+      padding:'1em',
+    },
+    '& fieldset': {
+      border: 'none',
+      marginBottom:'7px',
+      '& label': {
+        marginBottom: theme.spacing(.5),
+        display: 'block',
+      },
+    },
+  },
 })
-
-/* Load the packages for hashing and HTTP requests (must be installed with npm before) */
-var crypto = require("crypto");
-var request = require("request");
 
 export default ({
   drawerToggleListener
@@ -54,24 +77,27 @@ export default ({
     e.stopPropagation()
     setOauth(null)
   }
-  if(!currentUser)
-    setCurrentUser(oauth)
-  if(currentUser){
-    var email = currentUser.email
-    /*Generate a md5-hash of a email address and return its hexadecimal value */
-    var hash = crypto.createHash('md5').update(email).digest("hex");
-
-    /* Sends a GET request for the user profile */
-    request("https://www.gravatar.com/"+hash+".xml",function(err,response,body){
-      if (!err){
-        console.log(body);
-      }else{
-        console.log("Error: "+err);
-      }
-    })
-
-    const gravatar = "https://www.gravatar.com/avatar/" +hash+".jpg"
-    
+  const styles = useStyles(useTheme())
+  const fetchUser = async(oauth) =>{
+    if(oauth)
+      await setCurrentUser(oauth)
+  }
+  if(oauth && !currentUser)
+    fetchUser(oauth)
+  
+  if(oauth && currentUser){
+    const [openS, setOpenS] = useState(false); 
+    const handleOpenS = () => { 
+      setOpenS(true);
+    };
+    const handleCloseS = () => { 
+      setOpenS(false);
+    };
+    const settings = (
+      <div align="center" css={styles.modal}>
+          <Settings/>
+      </div> 
+    );
     return (
       <header css={styles.header}>
         <div css={styles.root}>
@@ -87,10 +113,13 @@ export default ({
             </IconButton>
               <img src={Logo} width="40" height="40"></img>
               <Typography variant="h6" style={{color:'#646e6e'}}>
-                  Welcome {oauth && oauth.email}
+                  Welcome {currentUser.username}
               </Typography>
               <div style={{position: 'absolute', right: '15px'}}>   
-                  <img src={gravatar} width="40" height="40" style={{borderRadius: '50%', marginRight: '10px'}}></img>
+                  <img src={currentUser.avatar} onClick={handleOpenS} width="40" height="40" style={{borderRadius: '50%', marginRight: '10px'}}></img>
+                  <Modal open={openS} onClose={handleCloseS}>
+                    {settings}
+                  </Modal>
                   <Link on onClick ={onClickLogout}><img src={Logout} width="40" height="40"></img></Link>
               </div>
             </Toolbar>

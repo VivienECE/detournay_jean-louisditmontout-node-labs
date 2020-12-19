@@ -59,7 +59,6 @@ export const Provider = ({
       setChannels: setChannels,
       currentChannel: currentChannel,
       setCurrentUser: async (oauth) => {
-        setUsers([])
         const {data: users} = await axios.get('http://localhost:3001/users')
         setUsers(users)
         let returnUser = oauth
@@ -72,6 +71,7 @@ export const Provider = ({
       },
       currentUser: currentUser,
       setCurrentChannel:  (channelId) => {
+        console.log('setCurrentChannel')
         const channel = channels.find( channel => channel.id === channelId)
         setCurrentChannel(channel)
       },

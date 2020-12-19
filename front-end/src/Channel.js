@@ -98,9 +98,6 @@ export default () => {
     }
   }
   const [users, setUsers] = useState([])
-  /*const addUser = (user) => {
-    fetchUsers()
-  }*/
   const fetchUsers = async () => {
     setUsers([])
     const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`)
@@ -129,7 +126,7 @@ export default () => {
   };
   const [friend, setFriend] = useState('')
   const onSubmit = async () => {
-    await axios.put(`http://localhost:3001/channels/${channel.id}/user`, 
+    await axios.post(`http://localhost:3001/channels/${channel.id}/users`, 
     {
       email: friend,
       rang: "member"

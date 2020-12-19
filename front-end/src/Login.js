@@ -16,6 +16,8 @@ import Logo from './icons/logo.png';
 import {
   useHistory
 } from "react-router-dom";
+import CreateUser from './CreateUser';
+import Modal from '@material-ui/core/Modal';
 
 const base64URLEncode = (str) => {
   return str.toString('base64')
@@ -54,6 +56,32 @@ const useStyles = (theme) => ({
       },
     },
   },
+  modal:{
+    border: 'none',
+    backgroundColor:'#f1f0ea',
+    display: 'flex',
+    position: 'relative',
+    top: '0%',
+    padding:'1em',
+    display: 'table',
+    textAlign : 'center',
+    margin:'auto',
+    
+    '& h2':{
+      color:'rgba(255,138,101,.9)',
+    },
+    '& form':{
+      padding:'2em',
+    },
+    '& fieldset': {
+          border: 'none',
+          marginBottom:'10px',
+          '& label': {
+            marginBottom: theme.spacing(.5),
+            display: 'block',
+          },
+        },
+  },
 })
 
 const Redirect = ({
@@ -61,6 +89,18 @@ const Redirect = ({
   codeVerifier,
 }) => {
   const styles = useStyles(useTheme())
+  const [openC, setOpenC] = useState(false); 
+  const handleOpenC = () => { 
+    setOpenC(true);
+  };
+  const handleCloseC = () => { 
+    setOpenC(false);
+  };
+  const createUser = (
+    <div align="center" css={styles.modal}>
+        <CreateUser/>
+    </div> 
+  );
   const redirect = (e) => {
     e.stopPropagation()
     const code_challenge = base64URLEncode(sha256(codeVerifier))
@@ -78,9 +118,11 @@ const Redirect = ({
   return (
     <div css={styles.root} style={{flexDirection: 'column'}}>
       <img src={Logo} width="150" height="150"></img><br></br>
-      <Button variant='contained' color="secondary">
-        <Link onClick={redirect} style={{color:'#f1f0ea'}}>Login with OpenID Connect and OAuth2</Link>
-      </Button>
+      <Button onClick={redirect} variant='contained' color="secondary">Login with OpenID Connect and OAuth2</Button>
+      <Button variant='outlined' color="secondary" onClick={handleOpenC} style={{marginTop: '30px'}}>Create an account</Button>
+      <Modal open={openC} onClose={handleCloseC}>
+        {createUser}
+      </Modal>
     </div>
   )
 }
@@ -110,8 +152,7 @@ export default ({
   const styles = useStyles(useTheme())
   // const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies([]);
-  const {oauth, setOauth, currentUser, setCurrentUser} = useContext(Context)
-  const [users, setUsers] = useState([])
+  const {oauth, setOauth} = useContext(Context)
   const config = {
     authorization_endpoint: 'http://127.0.0.1:5556/dex/auth',
     token_endpoint: 'http://127.0.0.1:5556/dex/token',

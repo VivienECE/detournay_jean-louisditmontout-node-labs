@@ -2,9 +2,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import axios from 'axios';
-import React, { useContext, useState, useEffect, data } from 'react';
+import React, { useContext, useEffect} from 'react';
 import Context from './Context'
-import Link from '@material-ui/core/Link'
 import { useTheme } from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
@@ -44,18 +43,28 @@ const useStyles = (theme) => ({
 export default () => {
   const {
     oauth,
-    channels, setChannels
+    channels, setChannels, currentUser
   } = useContext(Context)
   const history = useHistory();
   const styles = useStyles(useTheme())
   useEffect( () => {
     const fetch = async () => {
       try{
+        /**
         const {data: channels} = await axios.get('http://localhost:3001/channels', {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
+          }})
+         */
+        const axiosdata = {
+          email: currentUser.email,
+        };
+        const config = {
+          headers: {
+                'Authorization': `Bearer ${oauth.access_token}`
           }
-        })
+        };
+        await axios.get('http://localhost:3001/filtredchannels', axiosdata, config)
         setChannels(channels)
       }catch(err){
         console.error(err)

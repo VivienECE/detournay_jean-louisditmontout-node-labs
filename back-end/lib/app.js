@@ -26,23 +26,31 @@ app.get('/channels', authenticate, async (req, res) => {
   res.json(channels)
 })
 
-app.get('/filtredchannels', authenticate, async (req, res) => {
+app.put('/filtredchannels', async (req, res) => {
+  console.log("/filtredchannels")
+  console.log(req.body)
+  console.log("GetChannelList")
   const channelList = await db.channels.list()
-  const channels = await channelList.reduce(async function (accumulator, channel)  {
-    const users = await db.users.channellist(channel.id)
-    getChannel = users.map((user) => {
+   async function checkChannel(channel) { 
+  const users = await db.users.channellist(channel.id)
+  users.map((user) => {
+      console.log("IterateUser")
       if(req.body.email === user.email){
-      	return channel
+        return true
       }
-    })
-    return [...accumulator, ...getChannel]
-  },[])
-   
-  res.json(await Promise.all(channels))
+      else return false
+    })}
+  res.json(channelList.filter(checkChannel))
 })
 
 app.post('/channels', authenticate, async (req, res) => {
   const channel = await db.channels.create(req.body)
+  res.status(201).json(channel)
+})
+
+app.post('/channels/user/:id', authenticate, async (req, res) => {
+  const user = await db.users.get(req.params.id)
+  const channel = await db.channels.create(req.body,user)
   res.status(201).json(channel)
 })
 

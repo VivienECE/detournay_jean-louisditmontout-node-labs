@@ -150,7 +150,7 @@ export default forwardRef(({
   {
         if(allUsers.filter(user => user.email === author)[0])
   	  return(
-  	   <Avatar src={allUsers.filter(user => user.email === author)[0].avatar} />
+  	   <Avatar src={allUsers.filter(user => user.email === author)[0].avatar}/>
   	   )
   	else
   	   return(
@@ -210,7 +210,7 @@ export default forwardRef(({
           
                 if(message.author === oauth.email){
                   return (
-                    <li key={i} style={{ listStyleType:"none", textAlign: 'right' }} css={styles.message}>
+                    <li key={i} style={{ listStyleType:"none", float:'right', textAlign: 'right' }} css={styles.message}>
                         <p>
                         {getAvatar(message.author)}
                           <Typography style={{color:'#18545a'}} variant="overline">

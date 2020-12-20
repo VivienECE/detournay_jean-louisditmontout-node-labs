@@ -19,8 +19,6 @@ import Settings from './Settings';
 const useStyles = (theme) => ({
   header: {
     height: '60px',
-    //backgroundColor: 'rgba(255,255,255,.1)',
-    //backgroundColor: 'linear-gradient(45deg,  #270c59 30%, #184d5d 90%)',
     borderStyle: 'inset',
   },
   root: {
@@ -81,7 +79,6 @@ export default ({
     fetchUser(oauth)
     if(currentUser == null)
     {
-      console.log('header OK')
       return (
         <header css={styles.header}>
           <div css={styles.root}>

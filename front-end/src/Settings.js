@@ -58,6 +58,9 @@ const styles = {
   }, 
 }
 
+var crypto = require("crypto");
+var request = require("request");
+
 const Settings = () => { 
   const {oauth, currentUser, setCurrentUser} = useContext(Context)
   if(!currentUser)
@@ -81,6 +84,19 @@ const Settings = () => {
     setAvatar(picture)
     setOpenAv(false);
   }
+  function findGravatar(email){
+    var hash = crypto.createHash('md5').update(email).digest("hex");
+    request("https://www.gravatar.com/"+hash+".xml",function(err,response,body){
+      if (!err){
+        console.log(body);
+      }else{
+        console.log("Error: "+err);
+      }
+    })
+    let gravatar = "https://www.gravatar.com/avatar/" +hash+".jpg"
+    return gravatar 
+  }
+  
     
 
   const changeAvatar = (
@@ -92,6 +108,11 @@ const Settings = () => {
         imgExtension={['.jpg', '.png']}
         maxFileSize={5242880}
     />
+    <p>or</p>
+    <Button variant='contained' color="secondary" onClick={async () => {
+      setAvatar(findGravatar(oauth.email))
+      setOpenAv(false);
+    }}>Use my gravatar</Button>
     <p> or choose one below</p>
     <Grid
       container

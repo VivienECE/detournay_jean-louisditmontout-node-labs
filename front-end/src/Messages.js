@@ -18,6 +18,7 @@ import Modal from '@material-ui/core/Modal';
 import Context from './Context'
 import {useContext} from 'react';
 import axios from 'axios';
+import Avatar from '@material-ui/core/Avatar';
 
 
 const useStyles = (theme) => ({
@@ -81,9 +82,11 @@ const useStyles = (theme) => ({
 
 export default forwardRef(({
   channel,
+  users,
   messages,
   onScrollDown,
   fetchMessages,
+  fetchUsers
 }, ref) => {
   const styles = useStyles(useTheme())
   const {oauth, setOauth} = useContext(Context)
@@ -114,6 +117,17 @@ export default forwardRef(({
     rootNode.addEventListener('scroll', handleScroll)
     return () => rootNode.removeEventListener('scroll', handleScroll)
   })
+  /*const [users, setUsers] = useState([])
+  const fetchUsers = async () => {
+    setUsers([])
+    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
+    setUsers(users)
+  }
+  //fetchUsers()*/
 
   //Delete or modify a message
   const [openM, setOpenM] = useState(false); 
@@ -178,39 +192,47 @@ export default forwardRef(({
             .use(remark2rehype)
             .use(html)
             .processSync(message.content)
-            if(message.author == oauth.email){
-              return (
-              <li key={i} style={{ listStyleType:"none", textAlign: 'right' }} css={styles.message}>
-                  <p>
-                    <Typography style={{color:'#18545a'}} variant="overline">
-                      <span>{message.author}</span>
-                      {' - '} 
-                      <span>{format(new Date(message.creation / 1000), "do MMM p")}</span>
-                    </Typography>
-                  </p>
-                  <Typography>
-                     <div dangerouslySetInnerHTML={{__html: content}} onClick={handleOpenM}></div>
-                     <Modal open={openM} onClose={handleCloseM}>
-                      {updateM(message)}
-                    </Modal>
-                  </Typography>
-              </li>)
-            }
-            else{
-              return (
-                <li key={i} css={styles.message}>
-                    <p>
-                      <Typography style={{color:'#18545a'}} variant="overline">
-                        <span>{message.author}</span>
-                        {' - '} 
-                        <span>{format(new Date(message.creation / 1000), "do MMM p")}</span>
-                      </Typography>
-                    </p>
-                    <Typography>
-                       <div dangerouslySetInnerHTML={{__html: content}}></div>
-                    </Typography>
-                </li>)
-            }
+            users.map((user)=> {
+              if(message.author === user.email){
+                console.log('email')
+                if(message.author === oauth.email){
+                  console.log('author')
+                  return (
+                    <li key={i} style={{ listStyleType:"none", textAlign: 'right' }} css={styles.message}>
+                        <p>
+                          <Avatar>{user.avatar}</Avatar>
+                          <Typography style={{color:'#18545a'}} variant="overline">
+                            <span>{message.author}</span>
+                            {' - '} 
+                            <span>{format(new Date(message.creation / 1000), "do MMM p")}</span>
+                          </Typography>
+                        </p>
+                        <Typography>
+                          <div dangerouslySetInnerHTML={{__html: content}} onClick={handleOpenM}></div>
+                          <Modal open={openM} onClose={handleCloseM}>
+                            {updateM(message)}
+                          </Modal>
+                        </Typography>
+                    </li>)
+                }
+                else{
+                  return (
+                    <li key={i} css={styles.message}>
+                        <p>
+                        <Avatar>{user.avatar}</Avatar>
+                          <Typography style={{color:'#18545a'}} variant="overline">
+                            <span>{message.author}</span>
+                            {' - '} 
+                            <span>{format(new Date(message.creation / 1000), "do MMM p")}</span>
+                          </Typography>
+                        </p>
+                        <Typography>
+                           <div dangerouslySetInnerHTML={{__html: content}}></div>
+                        </Typography>
+                    </li>)
+                }
+              }
+            })
         })}
       </ul>
       <div ref={scrollEl} />

@@ -17,7 +17,8 @@ import axios from 'axios';
 import Context from './Context'
 import CreateUser from './CreateUser'
 import {useContext} from 'react';
-import{ init, emailjs } from 'emailjs-com';
+import{ init } from 'emailjs-com';
+import emailjs from 'emailjs-com';
 
 
 
@@ -179,13 +180,7 @@ export default () => {
       email: emailFriend,
       username: currentUser.username
     };
-   
-  emailjs.send('service_9rowkhs', 'template_1cif23p', templateParams)
-      .then(function(response) {
-         console.log('SUCCESS!', response.status, response.text);
-      }, function(error) {
-         console.log('FAILED...', error);
-      });
+    emailjs.send('service_9rowkhs', 'template_1cif23p', templateParams, 'user_UhKBebzwLHD2UQoxIrDOV')
     setOpenF(false);
   }
 

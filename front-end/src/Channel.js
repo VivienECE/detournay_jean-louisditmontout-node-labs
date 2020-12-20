@@ -278,15 +278,26 @@ export default () => {
     </div> 
   );
 
+
   return (
     <div css={styles.root}>
       <div css={styles.top}>
-        <Button onClick={handleOpenDel} style={{ float: 'right' }}>
-          <DeleteIcon fontSize="small" style={{ color: '#fff3e0' }}/>
-        </Button>
-        <Modal open={openDel} onClose={handleCloseDel}>
-          {deleteChannel}
-        </Modal>
+        {users.map((user)=>{
+          if(user.email === oauth.email){
+            if(user.rang === 'admin'){
+              return(
+                <div css={styles.top}>
+                  <Button onClick={handleOpenDel} style={{ float: 'right' }}>
+                    <DeleteIcon fontSize="small" style={{ color: '#fff3e0' }}/>
+                  </Button>
+                  <Modal open={openDel} onClose={handleCloseDel}>
+                    {deleteChannel}
+                  </Modal>
+                </div> 
+              )
+            }
+          }
+          })}
         <Button onClick={handleOpenN} style={{ float: 'right' }}>
           <CreateIcon fontSize="small" style={{ color: '#fff3e0' }}/>
         </Button>
@@ -309,10 +320,12 @@ export default () => {
       </div>
       <Messages
         channel={channel}
+        users={users}
         messages={messages}
         onScrollDown={onScrollDown}
         ref={listRef}
         fetchMessages={fetchMessages}
+        fetchUsers={fetchUsers}
       />
       <MessageSend addMessage={addMessage} channel={channel} />
       <Fab

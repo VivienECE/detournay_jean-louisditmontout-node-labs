@@ -2,12 +2,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import axios from 'axios';
-import React, { useContext, useEffect} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import Context from './Context'
 import { useTheme } from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
+import { useScrollTrigger } from '@material-ui/core';
 
 const useStyles = (theme) => ({
   channels: {
@@ -72,6 +73,17 @@ export default () => {
     if(currentUser)
       fetch()
   }, [oauth, setChannels])
+  /*const [users, setUsers] = useState([])
+  let usersOfChannel =[]
+  const fetchUsers = async (channel) => {
+    //setUsers([])
+    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
+    return users
+  }*/
   return (
     <ul style={styles.channels}>
       { channels.map( (channel, i) => (
@@ -85,11 +97,6 @@ export default () => {
             }}
           >
             {channel.name}
-          <AvatarGroup max={2} style={{ float: 'right' }}>
-            <Avatar>{channel.friend}</Avatar>
-            <Avatar></Avatar>
-            <Avatar></Avatar>
-          </AvatarGroup>
           </button> 
           
         </li>

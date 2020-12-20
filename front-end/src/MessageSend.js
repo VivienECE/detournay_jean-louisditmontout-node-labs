@@ -49,7 +49,7 @@ const MessageSend = ({
   const onSubmit = async () => {
     const axiosdata = {
       content: content,
-            author: email
+      author: email
      };
      const config = {
        headers: {

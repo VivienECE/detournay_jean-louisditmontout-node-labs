@@ -12,7 +12,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Context from './Context';
 import {useContext} from 'react';
 
-
 const useStyles = (theme) => ({
   root: {
     boxSizing: 'border-box',
@@ -24,7 +23,8 @@ const useStyles = (theme) => ({
 })
 
 export default () => {
-  const {oauth, drawerMobileVisible, setDrawerMobileVisible, currentUser} = useContext(Context)
+  const {oauth, currentUser} = useContext(Context)
+  const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)
   }

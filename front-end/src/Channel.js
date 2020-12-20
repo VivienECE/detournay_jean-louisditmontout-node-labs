@@ -1,3 +1,4 @@
+
 import {useContext, useRef, useState} from 'react';
 import axios from 'axios';
 /** @jsxRuntime classic */
@@ -233,7 +234,7 @@ export default () => {
   const modifyName = (
     <div align="center" css={styles.modal}>
       <h2>Change your channel's name!</h2>
-        <form> 
+      <form> 
             <fieldset>
               <Input placeholder="New name"  value={nameC} onChange={handleChangeN} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
             </fieldset>

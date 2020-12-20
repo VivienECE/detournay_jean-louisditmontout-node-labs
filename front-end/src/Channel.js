@@ -75,11 +75,26 @@ export default () => {
   const history = useHistory()
   const { id } = useParams()
   const styles = useStyles(useTheme())
-  const {channels, oauth, setOauth} = useContext(Context)
+  const {channels, oauth, setOauth, setChannels} = useContext(Context)
   const listRef = useRef()
   const channelId = useRef()
   const [messages, setMessages] = useState([])
   const [scrollDown, setScrollDown] = useState(false)
+  const fetchChannels = async () => {
+    const axiosdata = {
+      email: oauth.email
+    };
+    try{
+      const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata, {
+        headers: {
+          'Authorization': `Bearer ${oauth.access_token}`
+        }
+      })
+      setChannels(channels)
+    }catch(err){
+      console.error(err)
+    }
+  }
 
   const channel = channels.find( channel => channel.id === id)
   if(!channel) {
@@ -143,8 +158,9 @@ export default () => {
             'Authorization': `Bearer ${oauth.access_token}`
        }
      };
-    await axios.post(`http://localhost:3001/channels/${channel.id}/user`, axiosdata, config)
+    await axios.post(`http://localhost:3001/channels/${channel.id}/users`, axiosdata, config)
     setFriend('')
+    fetchUsers()
     setOpenF(false);
   }
   const handleChange = (e) => {
@@ -202,8 +218,13 @@ export default () => {
   };
   const [nameC, setName] = useState('')
   const onSubmitN = async () => {
-      await axios.put(`http://localhost:3001/channels/${channel.id}`, {name: nameC})
+      await axios.put(`http://localhost:3001/channels/${channel.id}`, {name: nameC}, {
+        headers: {
+             'Authorization': `Bearer ${oauth.access_token}`
+        }
+      })
       setName('')
+      fetchChannels()
       setOpenN(false);
   }
   const handleChangeN = (e) => {
@@ -235,9 +256,14 @@ export default () => {
     setOpenDel(false);
   };
   const onSubmitDel = async () => {
-    await axios.delete(`http://localhost:3001/channels/${channel.id}`)
+      axios.delete(`http://localhost:3001/channels/${channel.id}`, {
+      headers: {
+           'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
     setOpenDel(false);
-    //window.location.assign("http://localhost:3001/channels")
+    fetchChannels()
+    window.location.reload()
   }
   
   const deleteChannel = (
@@ -286,6 +312,7 @@ export default () => {
         messages={messages}
         onScrollDown={onScrollDown}
         ref={listRef}
+        fetchMessages={fetchMessages}
       />
       <MessageSend addMessage={addMessage} channel={channel} />
       <Fab

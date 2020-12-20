@@ -24,7 +24,7 @@ const useStyles = (theme) => ({
 })
 
 export default () => {
-  const {oauth, drawerMobileVisible, setDrawerMobileVisible} = useContext(Context)
+  const {oauth, drawerMobileVisible, setDrawerMobileVisible, currentUser} = useContext(Context)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)
   }
@@ -37,7 +37,7 @@ export default () => {
     <div className="App" css={styles.root}>
       <Header drawerToggleListener={drawerToggleListener}/>
       {
-        oauth ? <Main drawerMobileVisible={drawerMobileVisible} isDrawerVisible={isDrawerVisible}/> : <Login />
+        oauth && currentUser ? <Main drawerMobileVisible={drawerMobileVisible} isDrawerVisible={isDrawerVisible}/> : <Login />
       }
       <Footer />
     </div>

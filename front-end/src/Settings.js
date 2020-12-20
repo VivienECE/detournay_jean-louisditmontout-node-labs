@@ -248,6 +248,10 @@ const [email, setEmail] = useState(currentUser.email)
       username: username,
       email: email,
       birth: birth
+    }, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
     })
 }
 

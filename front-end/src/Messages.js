@@ -83,6 +83,7 @@ export default forwardRef(({
   channel,
   messages,
   onScrollDown,
+  fetchMessages,
 }, ref) => {
   const styles = useStyles(useTheme())
   const {oauth, setOauth} = useContext(Context)
@@ -127,7 +128,7 @@ export default forwardRef(({
   const handleChangeM = (e) => {
     setNewM(e.target.value)
   }
-
+  
   function updateM(messageSelected) {
     return(
         <div align="center" css={styles.modal}>
@@ -135,19 +136,31 @@ export default forwardRef(({
             <Input placeholder="New Message"  onChange={handleChangeM} value={newM} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
           </fieldset>
             <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={async () => {
-             console.log('del message.js')
-             await axios.delete(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`)
-             setOpenM(false);
+              const config = {
+                headers: {
+                     'Authorization': `Bearer ${oauth.access_token}`
+                }
+              };
+              axios.delete(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`, config)
+              setOpenM(false);
+              fetchMessages()
               }}>
                 Delete
             </Button>
             <Button color="inhirit" variant='contained' type="submit" onClick={async () => {
-              await axios.put(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`,{
+              const config = {
+                headers: {
+                     'Authorization': `Bearer ${oauth.access_token}`
+                }
+              };
+              const axiosdata = {
                 content: newM,
                 author: oauth.email
-              })
+               };
+              await axios.put(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`, axiosdata, config)
               setNewM('')
               setOpenM(false);
+              fetchMessages()
               }}>
                 Modify
             </Button>

@@ -89,18 +89,7 @@ const Redirect = ({
   codeVerifier,
 }) => {
   const styles = useStyles(useTheme())
-  const [openC, setOpenC] = useState(false); 
-  const handleOpenC = () => { 
-    setOpenC(true);
-  };
-  const handleCloseC = () => { 
-    setOpenC(false);
-  };
-  const createUser = (
-    <div align="center" css={styles.modal}>
-        <CreateUser/>
-    </div> 
-  );
+  
   const redirect = (e) => {
     e.stopPropagation()
     const code_challenge = base64URLEncode(sha256(codeVerifier))
@@ -119,10 +108,7 @@ const Redirect = ({
     <div css={styles.root} style={{flexDirection: 'column'}}>
       <img src={Logo} width="150" height="150"></img><br></br>
       <Button onClick={redirect} variant='contained' color="secondary">Login with OpenID Connect and OAuth2</Button>
-      <Button variant='outlined' color="secondary" onClick={handleOpenC} style={{marginTop: '30px'}}>Create an account</Button>
-      <Modal open={openC} onClose={handleCloseC}>
-        {createUser}
-      </Modal>
+      <Button variant='outlined' color="secondary" onClick={redirect} style={{marginTop: '30px'}}>Create an account</Button>
     </div>
   )
 }
@@ -150,7 +136,6 @@ export default ({
   onUser
 }) => {
   const styles = useStyles(useTheme())
-  // const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const {oauth, setOauth} = useContext(Context)
   const config = {
@@ -199,6 +184,18 @@ export default ({
       }
       fetch()
     })
+    const [openC, setOpenC] = useState(false); 
+    const handleOpenC = () => { 
+      setOpenC(true);
+    };
+    const handleCloseC = () => { 
+      setOpenC(false);
+    };
+    const createUser = (
+      <div align="center" css={styles.modal}>
+          <CreateUser/>
+      </div> 
+    );
     return (
         <div css={styles.root}>
           <div >
@@ -217,6 +214,12 @@ export default ({
                 Login
               </Button>
             </form>
+          </div>
+          <div>
+          <Button variant='outlined' color="secondary" onClick={handleOpenC} style={{marginTop: '30px'}}>Create an account</Button>
+          <Modal open={openC} onClose={handleCloseC}>
+          {createUser}
+          </Modal>
           </div>
          </div>
       );

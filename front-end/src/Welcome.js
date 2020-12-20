@@ -15,6 +15,7 @@ import Settings from './Settings';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import axios from 'axios';
 import Context from './Context'
+import CreateUser from './CreateUser'
 import {useContext} from 'react';
 import{ init, emailjs } from 'emailjs-com';
 
@@ -69,9 +70,39 @@ const useStyles = (theme) => ({
 
 export default () => {
   const styles = useStyles(useTheme())
-  const {oauth, setOauth, currentUser, setCurrentUser} = useContext(Context)
-  if(!currentUser)
+  const {oauth, setOauth, currentUser, setCurrentUser, setChannels} = useContext(Context)
+  const [openCreate, setOpenCreate] = useState(false); 
+  const fetchChannels = async () => {
+    const axiosdata = {
+      email: oauth.email
+    };
+    try{
+      const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata, {
+        headers: {
+          'Authorization': `Bearer ${oauth.access_token}`
+        }
+      })
+      setChannels(channels)
+    }catch(err){
+      console.error(err)
+    }
+  }
+  const handleOpenCreate = () => { 
+    setOpenCreate(true);
+  };
+  const handleCloseCreate = () => { 
+    setOpenCreate(false);
+  };
+  const createUser = (
+    <div align="center" css={styles.modal}>
+        <CreateUser/>
+    </div> 
+  );
+
+  if(!currentUser){
     setCurrentUser(oauth)
+  }
+    
 
   ///////////////////////////////////////////////////newChannel
   
@@ -84,12 +115,26 @@ export default () => {
   };
   const [nameC, setName] = useState('')
   const addChannel = async () => {
-    const {data: channels} = await axios.post(
+    const {data: channel} = await axios.post(
       `http://localhost:3001/channels`
     , {
       name: nameC,
+    },{
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
+    await axios.post(`http://localhost:3001/channels/${channel.id}/users`,
+    {
+      email: currentUser.email,
+      rang: 'admin'
+    }, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
     })
     setName('')
+    fetchChannels()
     setOpenC(false);
   }; 
   const handleChange = (e) => {

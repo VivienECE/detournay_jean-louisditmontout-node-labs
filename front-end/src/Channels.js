@@ -54,26 +54,23 @@ export default () => {
           }
         };
   const axiosdata = {
-          email: "clemencejldm@gmail.com"
+          email: oauth.email
         };
   useEffect( () => {
     const fetch = async () => {
       try{
-        
-        /**const {data: channels} = await axios.get('http://localhost:3001/channels', {
+        const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata, {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
-          }})**/
-     
-        console.log("TRY")
-    
-        const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata)
+          }
+        })
         setChannels(channels)
       }catch(err){
         console.error(err)
       }
     }
-    fetch()
+    if(currentUser)
+      fetch()
   }, [oauth, setChannels])
   return (
     <ul style={styles.channels}>

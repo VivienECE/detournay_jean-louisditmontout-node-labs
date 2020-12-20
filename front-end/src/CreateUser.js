@@ -61,7 +61,7 @@ const styles = {
 var crypto = require("crypto");
 var request = require("request");
 const CreateUser = () => { 
-  //const {oauth, currentUser, setCurrentUser} = useContext(Context)
+const {oauth, currentUser, setCurrentUser} = useContext(Context)
   //if(!currentUser)
     //setCurrentUser(oauth)
   
@@ -204,9 +204,12 @@ const [email, setEmail] = useState('')
       firstname: firstname,
       lastname: lastname,
       username: username,
-      email: email,
+      email: oauth.email,
       birth: birth
-    })
+    }, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }})
 }
 
 	return (
@@ -231,7 +234,7 @@ const [email, setEmail] = useState('')
             </fieldset>
             <fieldset>
               Email  
-              <Input value={email} type='email' onChange={handleChangeE} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
+              <Input value={oauth.email} type='email' onChange={handleChangeE} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
             </fieldset>
             <fieldset>
               Date of birth  

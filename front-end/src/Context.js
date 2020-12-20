@@ -67,7 +67,7 @@ export const Provider = ({
             'Authorization': `Bearer ${oauth.access_token}`
           }})
         setUsers(users)
-        let returnUser = oauth
+        let returnUser = null
         users.forEach(user => {
           if(user.email == oauth.email){
             returnUser = user

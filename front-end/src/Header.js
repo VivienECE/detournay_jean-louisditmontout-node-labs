@@ -83,8 +83,27 @@ export default ({
     if(oauth)
       await setCurrentUser(oauth)
   }
-  if(oauth && !currentUser)
+  if(oauth && !currentUser){
     fetchUser(oauth)
+    if(currentUser == null)
+    {
+      console.log('header OK')
+      return (
+        <header css={styles.header}>
+          <div css={styles.root}>
+            <AppBar position="static">
+              <Toolbar>
+                <img src={Logo} width="5%" height="5%"></img>
+                <Typography variant="h6" color ='textPrimary' css={styles.title}>
+                    Welcome !
+                </Typography>
+              </Toolbar>
+            </AppBar>
+          </div>
+        </header>
+        );
+    }
+  }
   
   if(oauth && currentUser){
     const [openS, setOpenS] = useState(false); 

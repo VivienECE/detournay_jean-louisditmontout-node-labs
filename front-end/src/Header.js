@@ -2,21 +2,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, {useState} from 'react'
-import {useCookies} from 'react-cookie'
 import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Context from './Context'
 import {useContext} from 'react';
 import Link from '@material-ui/core/Link';
-import Login from "./icons/login.png"
 import Logout from "./icons/logout.png"
 import Logo from "./icons/logo.png"
 import Modal from '@material-ui/core/Modal';

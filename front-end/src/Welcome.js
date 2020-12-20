@@ -70,39 +70,15 @@ const useStyles = (theme) => ({
 
 export default () => {
   const styles = useStyles(useTheme())
-  const {oauth, setOauth, currentUser, setCurrentUser, setChannels} = useContext(Context)
-  const [openCreate, setOpenCreate] = useState(false); 
-  const fetchChannels = async () => {
-    const axiosdata = {
-      email: oauth.email
-    };
-    try{
-      const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata, {
-        headers: {
-          'Authorization': `Bearer ${oauth.access_token}`
-        }
-      })
-      setChannels(channels)
-    }catch(err){
-      console.error(err)
+  const {oauth, currentUser, setCurrentUser, setChannels, fetchChannels} = useContext(Context)
+  const header = {
+    headers: {
+         'Authorization': `Bearer ${oauth.access_token}`
     }
-  }
-  const handleOpenCreate = () => { 
-    setOpenCreate(true);
-  };
-  const handleCloseCreate = () => { 
-    setOpenCreate(false);
-  };
-  const createUser = (
-    <div align="center" css={styles.modal}>
-        <CreateUser/>
-    </div> 
-  );
-
+  };  
   if(!currentUser){
     setCurrentUser(oauth)
   }
-    
 
   ///////////////////////////////////////////////////newChannel
   

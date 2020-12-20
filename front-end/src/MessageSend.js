@@ -43,7 +43,12 @@ const MessageSend = ({
   channel,
   }) => {
   const [content, setContent] = useState('')
-  const {oauth, setOauth} = useContext(Context)
+  const {oauth} = useContext(Context)
+  const header = {
+    headers: {
+         'Authorization': `Bearer ${oauth.access_token}`
+    }
+  };  
   var email = oauth.email
   const styles = useStyles(useTheme())
   const onSubmit = async () => {
@@ -51,12 +56,7 @@ const MessageSend = ({
       content: content,
             author: email
      };
-     const config = {
-       headers: {
-            'Authorization': `Bearer ${oauth.access_token}`
-       }
-     };
-    const {data: message} = await axios.post(`http://localhost:3001/channels/${channel.id}/messages`, axiosdata, config)
+    const {data: message} = await axios.post(`http://localhost:3001/channels/${channel.id}/messages`, axiosdata, header)
     addMessage(message)
     setContent('')
   }

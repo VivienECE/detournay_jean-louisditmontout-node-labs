@@ -1,7 +1,7 @@
 import {forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState} from 'react'
-import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+import { format} from 'date-fns'
 /** @jsxRuntime classic */
-/** @jsx jsx */
+/** @jsx jsx */ 
 import { jsx } from '@emotion/core';
 // Layout
 import { useTheme } from '@material-ui/core/styles';
@@ -11,7 +11,6 @@ import markdown from 'remark-parse'
 import remark2rehype from 'remark-rehype'
 import html from 'rehype-stringify'
 import Typography from '@material-ui/core/Typography';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {Button} from '@material-ui/core'
 import Input from '@material-ui/core/Input';
 import Modal from '@material-ui/core/Modal';
@@ -86,8 +85,12 @@ export default forwardRef(({
   fetchMessages,
 }, ref) => {
   const styles = useStyles(useTheme())
-  const {oauth, setOauth} = useContext(Context)
-  var email = oauth.email
+  const {oauth} = useContext(Context)
+  const header = {
+    headers: {
+         'Authorization': `Bearer ${oauth.access_token}`
+    }
+  };
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
     scroll: scroll
@@ -130,34 +133,25 @@ export default forwardRef(({
   }
   
   function updateM(messageSelected) {
+    
     return(
         <div align="center" css={styles.modal}>
           <fieldset>
             <Input placeholder="New Message"  onChange={handleChangeM} value={newM} inputProps={{ 'aria-label': 'description' }} color="primary" required/>
           </fieldset>
             <Button color="inhirit" variant='contained' style={{marginRight:'15px'}} onClick={async () => {
-              const config = {
-                headers: {
-                     'Authorization': `Bearer ${oauth.access_token}`
-                }
-              };
-              axios.delete(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`, config)
+              axios.delete(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`, header)
               setOpenM(false);
               fetchMessages()
               }}>
                 Delete
             </Button>
             <Button color="inhirit" variant='contained' type="submit" onClick={async () => {
-              const config = {
-                headers: {
-                     'Authorization': `Bearer ${oauth.access_token}`
-                }
-              };
               const axiosdata = {
                 content: newM,
                 author: oauth.email
                };
-              await axios.put(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`, axiosdata, config)
+              await axios.put(`http://localhost:3001/channels/${channel.id}/messages/${messageSelected.creation}`, axiosdata, header)
               setNewM('')
               setOpenM(false);
               fetchMessages()

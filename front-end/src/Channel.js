@@ -33,7 +33,6 @@ const useStyles = (theme) => ({
   top:{
     textAlign: 'center',
     color:'#fff3e0',
-    
   },
   fab: {
     position: 'absolute !important',
@@ -75,21 +74,22 @@ export default () => {
   const history = useHistory()
   const { id } = useParams()
   const styles = useStyles(useTheme())
-  const {channels, oauth, setOauth, setChannels} = useContext(Context)
+  const {channels, oauth, setChannels} = useContext(Context)
   const listRef = useRef()
   const channelId = useRef()
   const [messages, setMessages] = useState([])
   const [scrollDown, setScrollDown] = useState(false)
+  const header = {
+    headers: {
+         'Authorization': `Bearer ${oauth.access_token}`
+    }
+  };
   const fetchChannels = async () => {
     const axiosdata = {
       email: oauth.email
     };
     try{
-      const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata, {
-        headers: {
-          'Authorization': `Bearer ${oauth.access_token}`
-        }
-      })
+      const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata, header)
       setChannels(channels)
     }catch(err){
       console.error(err)
@@ -106,11 +106,7 @@ export default () => {
   }
   const fetchMessages = async () => {
     setMessages([])
-    const {data: messages} = await axios.get(`http://localhost:3001/channels/${channel.id}/messages`, {
-      headers: {
-        'Authorization': `Bearer ${oauth.access_token}`
-      }
-    })
+    const {data: messages} = await axios.get(`http://localhost:3001/channels/${channel.id}/messages`, header)
     setMessages(messages)
     if(listRef.current){
       listRef.current.scroll()
@@ -119,11 +115,7 @@ export default () => {
   const [users, setUsers] = useState([])
   const fetchUsers = async () => {
     setUsers([])
-    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`, {
-      headers: {
-        'Authorization': `Bearer ${oauth.access_token}`
-      }
-    })
+    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`, header)
     setUsers(users)
   }
 
@@ -153,12 +145,7 @@ export default () => {
       email: friend,
       rang: "member"
      };
-     const config = {
-       headers: {
-            'Authorization': `Bearer ${oauth.access_token}`
-       }
-     };
-    await axios.post(`http://localhost:3001/channels/${channel.id}/users`, axiosdata, config)
+    await axios.post(`http://localhost:3001/channels/${channel.id}/users`, axiosdata, header)
     setFriend('')
     fetchUsers()
     setOpenF(false);

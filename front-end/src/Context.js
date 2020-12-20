@@ -17,8 +17,18 @@ export const Provider = ({
   const [channels, setChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState(null)
   const [users, setUsers] = useState([])
-  
-  
+
+  const fetchChannels = async () => {
+    try{
+      const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', {email: oauth.email}, {
+    headers: {
+         'Authorization': `Bearer ${oauth.access_token}`
+    }})
+      setChannels(channels)
+    }catch(err){
+      console.error(err)
+    }
+  }
   
   async function findUser(oauth){
     setUsers([])
@@ -82,6 +92,7 @@ export const Provider = ({
         const channel = channels.find( channel => channel.id === channelId)
         setCurrentChannel(channel)
       },
+      fetchChannels : fetchChannels,
     }}>{children}</Context.Provider>
   )
 }

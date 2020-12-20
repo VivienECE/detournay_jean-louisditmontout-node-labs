@@ -30,35 +30,6 @@ app.get('/filtredchannels', async (req, res) => {
 
   console.log("/filtredchannels")
   const channelList = await db.channels.list()
-  /**
-   async function checkUsers(channel, users) { 
-   for await (const user of users) {
-        if(req.body.email === user.email){
-          console.log("ADD")
-          return user
-        }
-   }
-   return false
-   }
-   
-  var reduce = await channelList.reduce(async function(filtered, channel){
-    console.log("BEFORE")
-    return filtered.then( async channel => {
-     console.log(channel)
-   	 filtered.push(channel)
-    	return await channel
-    })
-  }, Promise.resolve([]));
-  
-  res.json(await Promise.resolve(reduce))**/
-  
-  /**const channels = channelList.filter(async function (channel) {
-  	const users = await db.users.channellist(channel.id)
-  	for await (const user of users)
-  	   if(req.body.email === user.email)
-  	   	return true
-
-  })**/
   const isUser = async (channel) => {
         var bool = false
   	const users = await db.users.channellist(channel.id)
@@ -71,9 +42,7 @@ app.get('/filtredchannels', async (req, res) => {
   (async () => {
 
   const shouldFilter = await Promise.all(channelList.map(isUser));
-  console.log(shouldFilter)
-  const filtered2 = channelList.filter((channelList, index) => shouldFilter[index]);
-  console.log(filtered2)
+  const filtered2 = channelList.filter((channelList, index) => shouldFilter[index])
   res.json(filtered2)
 })();
  

@@ -1,7 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import axios from 'axios';
 import React, { useContext, useEffect} from 'react';
 import Context from './Context'
 import { useTheme } from '@material-ui/core/styles';
@@ -35,43 +34,26 @@ const useStyles = (theme) => ({
     ':hover': {
       backgroundColor: 'rgba(255,255,255,.1)',
     },
-    
     'list-style-type': 'none', 
   },
 })
 
 export default () => {
-  const {
-    oauth,
-    channels, setChannels, currentUser, setCurrentUser
+  const {oauth, channels,
+     setChannels, currentUser, fetchChannels
   } = useContext(Context)
   const history = useHistory();
   const styles = useStyles(useTheme())
-
-  const config = {
-          headers: {
-                'Authorization': `Bearer ${oauth.access_token}`
-          }
-        };
-  const axiosdata = {
-          email: oauth.email
-        };
-  useEffect( () => {
-    const fetch = async () => {
-      try{
-        const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata, {
-          headers: {
-            'Authorization': `Bearer ${oauth.access_token}`
-          }
-        })
-        setChannels(channels)
-      }catch(err){
-        console.error(err)
-      }
+  const header = {
+    headers: {
+         'Authorization': `Bearer ${oauth.access_token}`
     }
+  };
+  useEffect( () => {
     if(currentUser)
-      fetch()
+      fetchChannels()
   }, [oauth, setChannels])
+
   return (
     <ul style={styles.channels}>
       { channels.map( (channel, i) => (

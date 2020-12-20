@@ -183,6 +183,7 @@ export default () => {
     };
     emailjs.send('service_9rowkhs', 'template_1cif23p', templateParams, 'user_UhKBebzwLHD2UQoxIrDOV')
     setOpenF(false);
+    setEmailFriend('')
   }
 
   const newFriend = (

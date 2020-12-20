@@ -111,12 +111,12 @@ app.get('/users/:id',authenticate, async (req, res) => {
 })
 
 app.put('/users/:id',authenticate, async (req, res) => {
-  const user = await db.users.update(req.body)
+  const user = await db.users.update(req.params.id,req.body)
   res.json(user)
 })
 
 app.delete('/users/:id', async (req, res) => {
-  await db.channels.delete(req.params.id, req.body)
+  await db.channels.delete(req.params.id)
   res.status(200)
 })
 

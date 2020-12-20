@@ -44,7 +44,6 @@ const styles = {
   },
   modal:{
     border: 'none',
-    //backgroundColor:'#f1f0ea',
     display: 'flex',
     position: 'relative',
     top: '0%',
@@ -62,10 +61,8 @@ var crypto = require("crypto");
 var request = require("request");
 const CreateUser = () => { 
 const {oauth, currentUser, setCurrentUser} = useContext(Context)
-  //if(!currentUser)
-    //setCurrentUser(oauth)
   
-  const [avatar, setAvatar] = useState('')
+  const [avatar, setAvatar] = useState()
   const [openAv, setOpenAv] = useState(false); 
   const handleOpenAv = () => { 
     setOpenAv(true);
@@ -108,7 +105,7 @@ const {oauth, currentUser, setCurrentUser} = useContext(Context)
     />
     <p>or</p>
     <Button variant='contained' color="secondary" onClick={async () => {
-      setAvatar(findGravatar(email))
+      setAvatar(findGravatar(oauth.email))
       setOpenAv(false);
     }}>Use my gravatar</Button>
     <p> or choose one below</p>

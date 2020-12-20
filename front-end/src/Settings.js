@@ -45,7 +45,6 @@ const styles = {
   },
   modal:{
     border: 'none',
-    //backgroundColor:'#f1f0ea',
     display: 'flex',
     position: 'relative',
     top: '40%',
@@ -59,42 +58,12 @@ const styles = {
   }, 
 }
 
-class UploadImage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { pictures: [] };
-    this.onDrop = this.onDrop.bind(this);
-  }
-
-  onDrop(pictureFiles, pictureDataURLs) {
-    this.props.setAvatar(pictureFiles)
-    this.setState({
-      pictures: pictureFiles
-    });
-  }
-  render() {
-    return (
-      <ImageUploader
-        withPreview={true}
-        withIcon={true}
-        buttonText="Choose images"
-        onChange={this.onDrop}
-        imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-        maxFileSize={5242880}
-      />
-    );
-  }
-}
-
-
 const Settings = () => { 
   const {oauth, currentUser, setCurrentUser} = useContext(Context)
   if(!currentUser)
     setCurrentUser(oauth)
   
   const [avatar, setAvatar] = useState(currentUser.avatar)
-  
-
   const [openAv, setOpenAv] = useState(false); 
   const handleOpenAv = () => { 
     setOpenAv(true);
@@ -107,27 +76,22 @@ const Settings = () => {
     setAvatar(e.target.src)
     setOpenAv(false);
   }
-  const onDropUpload = async (e, picture) =>{
-    console.log(picture)
-    console.log(picture[0].name)
-    /*let cameraImageUri = '';
-    if (picture) {
-      const fileName = picture[0].name.split('/').pop();
-      cameraImageUri = FileSystem.documentDirectory + fileName;
-      try {
-        await FileSystem.moveAsync({ from: picture[0].name, to: './icons' });
-      } catch (err) {
-        throw new Error(err);
-      }
-    }*/
-    setAvatar(e.target.pictureFiles)
+  
+  const onDropUpload = picture =>{
+    setAvatar(picture)
     setOpenAv(false);
   }
     
 
   const changeAvatar = (
   <div style={{backgroundColor:'#f1f0ea', margin: '20px'}}>
-    <UploadImage setAvatar={setAvatar} />
+    <ImageUploader
+        withIcon={true}
+        buttonText='Upload your image here'
+        onChange={onDropUpload}
+        imgExtension={['.jpg', '.png']}
+        maxFileSize={5242880}
+    />
     <p> or choose one below</p>
     <Grid
       container
@@ -230,15 +194,6 @@ const [email, setEmail] = useState(currentUser.email)
     setBirth(e.target.value)
   }
 
-  //darkMode
-  const [state, setState] = useState({
-    darkMode: false,
-  });
-
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
-
 //save all fields
   const Save = async () => {
     await axios.put(`http://localhost:3001/users/${currentUser.id}`, {
@@ -253,7 +208,8 @@ const [email, setEmail] = useState(currentUser.email)
         'Authorization': `Bearer ${oauth.access_token}`
       }
     })
-}
+    setCurrentUser(oauth)
+  }
 
 	return (
     <div css={styles.root}>

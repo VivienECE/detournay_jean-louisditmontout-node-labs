@@ -69,9 +69,9 @@ const useStyles = (theme) => ({
 export default ({
   drawerToggleListener
   }) => {
-  const {oauth, setOauth, currentUser, setCurrentUser} = useContext(Context)
-  const handleDrawerToggle = (e) => {
-    drawerToggleListener()
+  const {oauth, setOauth, currentUser, setCurrentUser, drawerVisible, setDrawerVisible} = useContext(Context)
+   const handleDrawerToggle = (e) => {
+    setDrawerVisible(!drawerVisible)
   }
   const onClickLogout = (e) => {
     e.stopPropagation()

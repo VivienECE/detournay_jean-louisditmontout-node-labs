@@ -16,8 +16,9 @@ export const Provider = ({
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [channels, setChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState(null)
-  
   const [users, setUsers] = useState([])
+  
+  
   
   async function findUser(oauth){
     setUsers([])

@@ -16,6 +16,16 @@ module.exports = {
         ))
       return merge(channel, {id: id})
     },
+    createWithUser: async (channel,user) => {
+      if(!channel.name) throw Error('Invalid channel')
+      const id = uuid()
+      await db.put(`channels:${id}`, JSON.stringify({
+        name: channel.name,
+      }
+        ))
+      await db.put(`channelusers:${id}:${user.id}`, JSON.stringify(user))
+      return merge(channel, {id: id})
+    },
     get: async (id) => {
       if(!id) throw Error('Invalid id')
       const data = await db.get(`channels:${id}`)

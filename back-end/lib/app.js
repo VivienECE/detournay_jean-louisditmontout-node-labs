@@ -27,20 +27,27 @@ app.get('/channels', authenticate, async (req, res) => {
 })
 
 app.put('/filtredchannels', async (req, res) => {
-  console.log("/filtredchannels")
-  console.log(req.body)
-  console.log("GetChannelList")
+ console.log("/filtredchannels")
   const channelList = await db.channels.list()
-   async function checkChannel(channel) { 
-  const users = await db.users.channellist(channel.id)
-  users.map((user) => {
-      console.log("IterateUser")
-      if(req.body.email === user.email){
-        return true
-      }
-      else return false
-    })}
-  res.json(channelList.filter(checkChannel))
+  console.log(channelList)
+  const isUser = async (channel) => {
+        var bool = false
+  	const users = await db.users.channellist(channel.id)
+  	for await (const user of users)
+  	   if(req.body.email === user.email)
+  	   	bool = true 
+  	return bool
+  	}
+  	   	
+  (async () => {
+
+  const shouldFilter = await Promise.all(channelList.map(isUser));
+  console.log(shouldFilter)
+  const filtered2 = channelList.filter((channelList, index) => shouldFilter[index]);
+  console.log(filtered2)
+  res.json(filtered2)
+})();
+ 
 })
 
 app.post('/channels', authenticate, async (req, res) => {

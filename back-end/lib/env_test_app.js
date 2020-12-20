@@ -30,31 +30,55 @@ app.get('/filtredchannels', async (req, res) => {
 
   console.log("/filtredchannels")
   const channelList = await db.channels.list()
-   async function checkChannel(channel) { 
-     return false;
-     const users = await db.users.channellist(channel.id)
-     users.map((user) => {
+  /**
+   async function checkUsers(channel, users) { 
+   for await (const user of users) {
         if(req.body.email === user.email){
-          return false
+          console.log("ADD")
+          return user
         }
-        else
-        {
-         return false
-        }
-     return false
-   })}
+   }
+   return false
+   }
    
   var reduce = await channelList.reduce(async function(filtered, channel){
-    const users = await db.users.channellist(channel.id)
-    users.map((user) => {
-        if(req.body.email === user.email){
-          filtered.push(channel)
-        }})
-    return filtered;
-  }, []);
+    console.log("BEFORE")
+    return filtered.then( async channel => {
+     console.log(channel)
+   	 filtered.push(channel)
+    	return await channel
+    })
+  }, Promise.resolve([]));
   
-  console.log(await Promise.all(reduce))
-  res.json(await Promise.all(reduce))
+  res.json(await Promise.resolve(reduce))**/
+  
+  /**const channels = channelList.filter(async function (channel) {
+  	const users = await db.users.channellist(channel.id)
+  	for await (const user of users)
+  	   if(req.body.email === user.email)
+  	   	return true
+
+  })**/
+  const isUser = async (channel) => {
+        var bool = false
+  	const users = await db.users.channellist(channel.id)
+  	for await (const user of users)
+  	   if(req.body.email === user.email)
+  	   	bool = true 
+  	return bool
+  	}
+  	   	
+  (async () => {
+
+  const shouldFilter = await Promise.all(channelList.map(isUser));
+  console.log(shouldFilter)
+  const filtered2 = channelList.filter((channelList, index) => shouldFilter[index]);
+  console.log(filtered2)
+  res.json(filtered2)
+})();
+ 
+  
+  
 })
 
 app.post('/channels', async (req, res) => {

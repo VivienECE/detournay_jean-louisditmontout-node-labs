@@ -118,7 +118,7 @@ export default () => {
     }
   }
   const [users, setUsers] = useState([])
-  const fetchUsers = async () => {
+  const fetchAllUsers = async () => {
     setUsers([])
     const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`, {
       headers: {
@@ -127,10 +127,22 @@ export default () => {
     })
     setUsers(users)
   }
-
+  
+  const [allUsers, setallUsers] = useState([])
+  const fetchUsers = async () => {
+    setallUsers([])
+    const {data: users} = await axios.get(`http://localhost:3001/users`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
+    setallUsers(users)
+  }
+  
   if(channelId.current !== channel.id){
     fetchMessages()
     fetchUsers()
+    fetchAllUsers()
     channelId.current = channel.id
   }
   const onScrollDown = (scrollDown) => {
@@ -327,6 +339,7 @@ export default () => {
         ref={listRef}
         fetchMessages={fetchMessages}
         fetchUsers={fetchUsers}
+        allUsers={allUsers}
       />
       <MessageSend addMessage={addMessage} channel={channel} />
       <Fab

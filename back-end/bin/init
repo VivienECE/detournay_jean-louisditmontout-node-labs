@@ -26,7 +26,7 @@ function findGravatar(email){
   await Promise.all([{
     name: 'Channel 1',
     messages: [{
-      author: 'vivien',
+      author: 'vivien.detournay@edu.ece.fr',
       creation: 1602831101929,
       content: `
       ## 1 - Architecture - Level easy
@@ -59,7 +59,7 @@ function findGravatar(email){
       \`\`\`
       `.replace(/^ {6}/gm,''),
     },{
-      author: 'clemence',
+      author: 'clemencejldm@gmail.com',
       creation: 1602832138892,
       content: `
       ## 2 - Styles - Level easy
@@ -69,7 +69,7 @@ function findGravatar(email){
       with an icon, working on the header, providing day/night themes ... be creative
       `.replace(/^ {6}/gm,''),
     },{
-      author: 'vivien',
+      author: 'vivien.detournay@edu.ece.fr',
       creation: 1602840139202,
       content: `
       ## 3 - Use an external library - Level medium
@@ -83,7 +83,7 @@ function findGravatar(email){
       and act accordingly.
       `.replace(/^ {6}/gm,''),
     },{
-      author: 'clemence',
+      author: 'clemencejldm@gmail.com',
       creation: 1602844139200,
       content: `
       ## 4 - Support message contents in Markdown - Level hard
@@ -110,13 +110,13 @@ function findGravatar(email){
   },{
     name: 'Channel 2',
     messages: [{
-      author: 'vivien',
+      author: 'vivien.detournay@edu.ece.fr',
       creation: 1602223579200,
       content: `
       Ping
       `.replace(/^ {6}/gm,'')
     },{
-      author: 'david',
+      author: 'david.worms@edu.ece.fr',
       creation: 1602523579200,
       content: `
       Pong
@@ -125,19 +125,19 @@ function findGravatar(email){
     users: [{
       email: "david.worms@edu.ece.fr" ,
       rang: "admin"},{
-      email: "david@adaltas.com",
+      email: "vivien.detournay@edu.ece.fr",
       rang: "membre"
     }]
   },{
     name: 'Channel 3',
     messages: [{
-      author: 'david',
+      author: 'david.worms@edu.ece.fr',
       creation: 1602223579200,
       content: `
       What is the answer to the Ultimate Question of Life, the Universe and Everything ?
       `.replace(/^ {6}/gm,'')
     },{
-      author: 'clemence',
+      author: 'clemencejldm@gmail.com',
       creation: 1602523579200,
       content: `
       42
@@ -146,7 +146,7 @@ function findGravatar(email){
     users: [{
       email: "clemencejldm@gmail.com",
       rang: "admin"},{
-      email: "david@adaltas.com",
+      email: "david.worms@edu.ece.fr",
       rang: "membre"
     }]
   }].map( async (channel) => {
@@ -185,7 +185,7 @@ function findGravatar(email){
     lastname: 'WORMS',
     username: 'DavidW',
     password: 'worms',
-    email: 'david@adaltas.com',
+    email: 'david.worms@edu.ece.fr',
     birth: new Date(1987, 04, 12),
     avatar: findGravatar('david@adaltas.com')
 

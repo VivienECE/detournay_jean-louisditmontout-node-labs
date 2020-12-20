@@ -1,4 +1,5 @@
 
+
 import {forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState} from 'react'
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 /** @jsxRuntime classic */
@@ -87,10 +88,11 @@ export default forwardRef(({
   messages,
   onScrollDown,
   fetchMessages,
-  fetchUsers
+  fetchUsers,
+  allUsers
 }, ref) => {
   const styles = useStyles(useTheme())
-  const {oauth, setOauth} = useContext(Context)
+  const {oauth, setOauth,currentUser} = useContext(Context)
   var email = oauth.email
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
@@ -144,6 +146,18 @@ export default forwardRef(({
     setNewM(e.target.value)
   }
   
+  function getAvatar(author)
+  {
+        if(allUsers.filter(user => user.email === author)[0])
+  	  return(
+  	   <Avatar src={allUsers.filter(user => user.email === author)[0].avatar} />
+  	   )
+  	else
+  	   return(
+  	   <Avatar>{undefined}</Avatar>
+  	   )
+  }
+  
   function updateM(messageSelected) {
     return(
         <div align="center" css={styles.modal}>
@@ -193,15 +207,12 @@ export default forwardRef(({
             .use(remark2rehype)
             .use(html)
             .processSync(message.content)
-            users.map((user)=> {
-              if(message.author === user.email){
-                console.log('email')
+          
                 if(message.author === oauth.email){
-                  console.log('author')
                   return (
                     <li key={i} style={{ listStyleType:"none", textAlign: 'right' }} css={styles.message}>
                         <p>
-                          <Avatar>{user.avatar}</Avatar>
+                        {getAvatar(message.author)}
                           <Typography style={{color:'#18545a'}} variant="overline">
                             <span>{message.author}</span>
                             {' - '} 
@@ -217,10 +228,11 @@ export default forwardRef(({
                     </li>)
                 }
                 else{
+                 console.log(allUsers.filter(user => user.email === message.author))
                   return (
                     <li key={i} css={styles.message}>
                         <p>
-                        <Avatar>{user.avatar}</Avatar>
+                          {getAvatar(message.author)}
                           <Typography style={{color:'#18545a'}} variant="overline">
                             <span>{message.author}</span>
                             {' - '} 
@@ -231,12 +243,12 @@ export default forwardRef(({
                            <div dangerouslySetInnerHTML={{__html: content}}></div>
                         </Typography>
                     </li>)
-                }
-              }
-            })
+                }       
+          
         })}
       </ul>
       <div ref={scrollEl} />
     </div>
   )
 })
+

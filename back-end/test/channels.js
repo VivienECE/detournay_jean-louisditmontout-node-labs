@@ -1,6 +1,6 @@
 
 const supertest = require('supertest')
-const app = require('../lib/app')
+const app = require('../lib/env_test_app')
 const db = require('../lib/db')
 
 describe('channels', () => {
@@ -65,29 +65,110 @@ describe('channels', () => {
     channel.name.should.eql('channel 1')
   })
   
-    it('get a channel in an user', async () => {
-    // Create a user
-    const {body: user} = await supertest(app)
+ it('get an user in channel', async () => {
+    await supertest(app)
     .post('/users')
     .send({email: 'user_1'})
-    // Create a channel inside it 
-    console.log(`/users/${user.id}/channels`)
-    const {body: channel} = await supertest(app)
-    .post(`/users/${user.id}/channels`)
-    .send({id: "afdacea7-4a08-4905-8855-951f3f5f7394"})
-    .send({name: 'channel 1'})
-    .expect(201)
-    channel.should.match({
+    // Ensure we list the users correctly
+    const {body: user1} = await supertest(app)
+    .get('/users')
+    .expect(200)
+    user1.should.match([{
       id: /^\w+-\w+-\w+-\w+-\w+$/,
-      name: 'channel 1'
+      email: 'user_1'
+    }])
+    // Create a channel
+    const {body: channel} = await supertest(app)
+    .post('/channels')
+    .send({name: 'channel 1'})
+    .send({email: "user_1"})
+    // Create a message inside it
+    const {body: user} = await supertest(app)
+    .post(`/channels/${channel.id}/users`)
+    .send({email: "user_1"})
+    .expect(201)
+    user.should.match({
+      email: 'user_1',
+      id: /^\w+-\w+-\w+-\w+-\w+$/,
     })
     // Check it was correctly inserted
-    const {body: channels} = await supertest(app)
-    .get(`/users/${user.id}/channels`)
-    channels.length.should.eql(1)
+    const {body: users} = await supertest(app)
+    .get(`/channels/${channel.id}/users`)
+    users.length.should.eql(1)
+    users.should.match([{
+      email: 'user_1',
+      id: /^\w+-\w+-\w+-\w+-\w+$/,
+    }])
+    
+     const {body: channels} = await supertest(app)
+    .get('/filtredchannels')
+     .send({email: "user_1"})
+    .expect(200)
     channels.should.match([{
       id: /^\w+-\w+-\w+-\w+-\w+$/,
       name: 'channel 1'
+    }])
+  })
+  
+   it('create 3 channels and get distinct per user', async () => {
+    await supertest(app)
+    .post('/users')
+    .send({email: 'user_1'})
+    // Ensure we list the users correctly
+    const {body: user1} = await supertest(app)
+    .get('/users')
+    .expect(200)
+    user1.should.match([{
+      id: /^\w+-\w+-\w+-\w+-\w+$/,
+      email: 'user_1'
+    }])
+    // Create a channel
+    const {body: channel} = await supertest(app)
+    .post('/channels')
+    .send({name: 'channel 1'})
+    .send({email: "user_1"})
+    const {body: channel2} = await supertest(app)
+    .post('/channels')
+    .send({name: 'channel 2'})
+    .send({email: "user_2"})
+    const {body: channel3} = await supertest(app)
+    .post('/channels')
+    .send({name: 'channel 3'})
+    .send({email: "user_3"})
+    // Create a message inside it
+    const {body: user} = await supertest(app)
+    .post(`/channels/${channel.id}/users`)
+    .send({email: "user_1"})
+    .expect(201)
+    user.should.match({
+      id: /^\w+-\w+-\w+-\w+-\w+$/,
+      email: 'user_1',
+    })
+    // Check it was correctly inserted
+    const {body: users} = await supertest(app)
+    .get(`/channels/${channel.id}/users`)
+    users.length.should.eql(1)
+    users.should.match([{
+      id: /^\w+-\w+-\w+-\w+-\w+$/,
+      email: 'user_1',
+    }])
+    
+     const {body: channels} = await supertest(app)
+    .get('/filtredchannels')
+    .send({email: "user_1"})
+    .expect(200)
+    channels.should.match([{
+      id: /^\w+-\w+-\w+-\w+-\w+$/,
+      name: 'channel 1'
+    }])
+    
+     const {body: channels2} = await supertest(app)
+    .get('/filtredchannels')
+    .send({email: "user_2"})
+    .expect(200)
+    channels2.should.match([{
+      id: /^\w+-\w+-\w+-\w+-\w+$/,
+      name: 'channel 2'
     }])
   })
   

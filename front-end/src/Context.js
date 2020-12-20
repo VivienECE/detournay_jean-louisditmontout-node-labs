@@ -21,7 +21,10 @@ export const Provider = ({
   
   async function findUser(oauth){
     setUsers([])
-    const {data: users} = await axios.get('http://localhost:3001/users')
+    const {data: users} = await axios.get('http://localhost:3001/users', {
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }})
     setUsers(users)
     let returnUser = oauth
     users.forEach(user => {
@@ -59,7 +62,10 @@ export const Provider = ({
       setChannels: setChannels,
       currentChannel: currentChannel,
       setCurrentUser: async (oauth) => {
-        const {data: users} = await axios.get('http://localhost:3001/users')
+        const {data: users} = await axios.get('http://localhost:3001/users',{
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }})
         setUsers(users)
         let returnUser = oauth
         users.forEach(user => {

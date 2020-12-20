@@ -74,24 +74,28 @@ export default () => {
   
   const history = useHistory()
   const { id } = useParams()
-  const {channels} = useContext(Context)
+  const styles = useStyles(useTheme())
+  const {channels, oauth, setOauth} = useContext(Context)
+  const listRef = useRef()
+  const channelId = useRef()
+  const [messages, setMessages] = useState([])
+  const [scrollDown, setScrollDown] = useState(false)
+
   const channel = channels.find( channel => channel.id === id)
   if(!channel) {
     history.push('/oups')
     return <div/>
   }
-  const styles = useStyles(useTheme())
-  const {oauth, setOauth} = useContext(Context)
-  const listRef = useRef()
-  const channelId = useRef()
-  const [messages, setMessages] = useState([])
-  const [scrollDown, setScrollDown] = useState(false)
   const addMessage = (message) => {
     fetchMessages()
   }
   const fetchMessages = async () => {
     setMessages([])
-    const {data: messages} = await axios.get(`http://localhost:3001/channels/${channel.id}/messages`)
+    const {data: messages} = await axios.get(`http://localhost:3001/channels/${channel.id}/messages`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
     setMessages(messages)
     if(listRef.current){
       listRef.current.scroll()
@@ -100,7 +104,11 @@ export default () => {
   const [users, setUsers] = useState([])
   const fetchUsers = async () => {
     setUsers([])
-    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`)
+    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
     setUsers(users)
   }
 
@@ -126,11 +134,16 @@ export default () => {
   };
   const [friend, setFriend] = useState('')
   const onSubmit = async () => {
-    await axios.post(`http://localhost:3001/channels/${channel.id}/users`, 
-    {
+    const axiosdata = {
       email: friend,
       rang: "member"
-    })
+     };
+     const config = {
+       headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+       }
+     };
+    await axios.post(`http://localhost:3001/channels/${channel.id}/user`, axiosdata, config)
     setFriend('')
     setOpenF(false);
   }

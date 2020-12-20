@@ -77,6 +77,7 @@ export default ({
     e.stopPropagation()
     setOauth(null)
   }
+
   const styles = useStyles(useTheme())
   const fetchUser = async(oauth) =>{
     if(oauth)
@@ -98,6 +99,7 @@ export default ({
           <Settings/>
       </div> 
     );
+
     return (
       <header css={styles.header}>
         <div css={styles.root}>

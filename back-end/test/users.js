@@ -1,6 +1,6 @@
 
 const supertest = require('supertest')
-const app = require('../lib/app')
+const app = require('../lib/env_test_app')
 const db = require('../lib/db')
 
 describe('users', () => {
@@ -89,7 +89,7 @@ describe('users', () => {
     users.length.should.eql(1)
   })
   
-  it('get an user in channel', async () => {
+  it('get user in channel', async () => {
     await supertest(app)
     .post('/users')
     .send({email: 'user_1'})
@@ -118,11 +118,13 @@ describe('users', () => {
     // Check it was correctly inserted
     const {body: users} = await supertest(app)
     .get(`/channels/${channel.id}/users`)
+    .send({email: "user_1"})
     users.length.should.eql(1)
     users.should.match([{
       email: 'user_1',
       id: /^\w+-\w+-\w+-\w+-\w+$/
     }])
+
   })
   
   

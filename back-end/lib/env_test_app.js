@@ -29,19 +29,29 @@ app.get('/channels', async (req, res) => {
 app.get('/filtredchannels', async (req, res) => {
 
   
-  const channelList = await db.channels.list()/**
-  const channels = await channelList.map( async (channel) => {
+  const channelList = await db.channels.list()
+  /**const channels = await channelList.map( async (channel) => {
       const users = await db.users.channellist(channel.id)
-      var user = 0
       user = users.map((user) => {
+        channels.pop()
       	if(req.body.email === user.email){
-      		channels.push(channel)
-      		console.log("ADD")
+      		channel.delete()
+      	}
+      })
+    })**/
+    const channels = await channelList.reduce(async function (accumulator, channel)  {
+      const users = await db.users.channellist(channel.id)
+      getChannel = users.map((user) => {
+      	if(req.body.email === user.email){
       		return channel
       	}
       })
-      if(user) return user
-    })**/
+      	return [...accumulator, ...getChannel]
+      	//accumulator.push(getChannel)
+      	//console.log(accumulator)
+      	//return [...accumulator, accumulator]
+      },[])
+    /**
     const channels = await channelList.map( async (channel) => {
       const users = await db.users.channellist(channel.id)
       const user = users.map((user) => {
@@ -53,13 +63,13 @@ app.get('/filtredchannels', async (req, res) => {
       })
       console.log(channels)
       return channels
-    }) 
-    
-    async function getChannels(channelList) {
+    }) **/
+    /**
+    async function getChannels() {
      return(await Promise.all(channels))
-  }
+  }**/
    
-  res.json(await Promise.all(getChannels(channelList)))
+  res.json(await Promise.all(channels))
   
   /**
   const channelList = await db.channels.list()

@@ -47,7 +47,7 @@ export default () => {
   } = useContext(Context)
   const history = useHistory();
   const styles = useStyles(useTheme())
-  /**
+
   const config = {
           headers: {
                 'Authorization': `Bearer ${oauth.access_token}`
@@ -55,19 +55,19 @@ export default () => {
         };
   const axiosdata = {
           email: "vivien.detournay@edu.ece.fr",
-        };**/
+        };
   useEffect( () => {
     const fetch = async () => {
       try{
-        
+        /**
         const {data: channels} = await axios.get('http://localhost:3001/channels', {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
-          }})
-        /**
+          }})**/
+     
         console.log("TRY")
     
-        await axios.get('http://localhost:3001/filtredchannels', axiosdata, config)**/
+        await axios.get('http://localhost:3001/filtredchannels', axiosdata, config)
         setChannels(channels)
       }catch(err){
         console.error(err)

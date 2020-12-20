@@ -28,69 +28,57 @@ app.get('/channels', async (req, res) => {
 
 app.get('/filtredchannels', async (req, res) => {
 
-  
+  console.log("/filtredchannels")
   const channelList = await db.channels.list()
-  /**const channels = await channelList.map( async (channel) => {
-      const users = await db.users.channellist(channel.id)
-      user = users.map((user) => {
-        channels.pop()
-      	if(req.body.email === user.email){
-      		channel.delete()
-      	}
-      })
-    })**/
-    const channels = await channelList.reduce(async function (accumulator, channel)  {
-      const users = await db.users.channellist(channel.id)
-      getChannel = users.map((user) => {
-      	if(req.body.email === user.email){
-      		return channel
-      	}
-      })
-      	return [...accumulator, ...getChannel]
-      	//accumulator.push(getChannel)
-      	//console.log(accumulator)
-      	//return [...accumulator, accumulator]
-      },[])
-    /**
-    const channels = await channelList.map( async (channel) => {
-      const users = await db.users.channellist(channel.id)
-      const user = users.map((user) => {
-      	if(req.body.email === user.email){
-      	  channels.push(channel)
-      		console.log("ADD")
-      		
-      	}
-      })
-      console.log(channels)
-      return channels
-    }) **/
-    /**
-    async function getChannels() {
-     return(await Promise.all(channels))
-  }**/
-   
-  res.json(await Promise.all(channels))
-  
   /**
-  const channelList = await db.channels.list()
-  let getChannel = async function (channel)
-  {
-  	getChannel.push(channel)
-  	return getChannel
-  }
-  const promises = channelList.map(async channel => {
-    const users = await db.users.channellist(channel.id)
-     const channels = users.map(async (user) => {
-      	if(req.body.email === user.email){
-      	   channels = await getChannel(channel)
-      	   console.log(channels)
-      	}
-      })
-      return channels
-  })
-  const results = await Promise.all(promises)
-  res.json(results)
-  **/
+   async function checkUsers(channel, users) { 
+   for await (const user of users) {
+        if(req.body.email === user.email){
+          console.log("ADD")
+          return user
+        }
+   }
+   return false
+   }
+   
+  var reduce = await channelList.reduce(async function(filtered, channel){
+    console.log("BEFORE")
+    return filtered.then( async channel => {
+     console.log(channel)
+   	 filtered.push(channel)
+    	return await channel
+    })
+  }, Promise.resolve([]));
+  
+  res.json(await Promise.resolve(reduce))**/
+  
+  /**const channels = channelList.filter(async function (channel) {
+  	const users = await db.users.channellist(channel.id)
+  	for await (const user of users)
+  	   if(req.body.email === user.email)
+  	   	return true
+
+  })**/
+  const isUser = async (channel) => {
+        var bool = false
+  	const users = await db.users.channellist(channel.id)
+  	for await (const user of users)
+  	   if(req.body.email === user.email)
+  	   	bool = true 
+  	return bool
+  	}
+  	   	
+  (async () => {
+
+  const shouldFilter = await Promise.all(channelList.map(isUser));
+  console.log(shouldFilter)
+  const filtered2 = channelList.filter((channelList, index) => shouldFilter[index]);
+  console.log(filtered2)
+  res.json(filtered2)
+})();
+ 
+  
+  
 })
 
 app.post('/channels', async (req, res) => {

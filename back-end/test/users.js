@@ -77,7 +77,6 @@ describe('users', () => {
     const {body: user} = await supertest(app)
     .post(`/channels/${channel.id}/users`)
     .send({email: "user_1"})
-    .send({id: "afdacea7-4a08-4905-8855-951f3f5f7394"})
     .expect(201)
     user.should.match({
       email: 'user_1',
@@ -109,7 +108,6 @@ describe('users', () => {
     const {body: user} = await supertest(app)
     .post(`/channels/${channel.id}/users`)
     .send({email: "user_1"})
-    .send({id: "afdacea7-4a08-4905-8855-951f3f5f7394"})
     .expect(201)
     user.should.match({
       email: 'user_1',

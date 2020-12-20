@@ -26,23 +26,38 @@ app.get('/channels', authenticate, async (req, res) => {
   res.json(channels)
 })
 
-app.get('/filtredchannels', authenticate, async (req, res) => {
+app.put('/filtredchannels', async (req, res) => {
+ console.log("/filtredchannels")
   const channelList = await db.channels.list()
-  const channels = await channelList.reduce(async function (accumulator, channel)  {
-    const users = await db.users.channellist(channel.id)
-    getChannel = users.map((user) => {
-      if(req.body.email === user.email){
-      	return channel
-      }
-    })
-    return [...accumulator, ...getChannel]
-  },[])
-   
-  res.json(await Promise.all(channels))
+  console.log(channelList)
+  const isUser = async (channel) => {
+        var bool = false
+  	const users = await db.users.channellist(channel.id)
+  	for await (const user of users)
+  	   if(req.body.email === user.email)
+  	   	bool = true 
+  	return bool
+  	}
+  	   	
+  (async () => {
+
+  const shouldFilter = await Promise.all(channelList.map(isUser));
+  console.log(shouldFilter)
+  const filtered2 = channelList.filter((channelList, index) => shouldFilter[index]);
+  console.log(filtered2)
+  res.json(filtered2)
+})();
+ 
 })
 
 app.post('/channels', authenticate, async (req, res) => {
   const channel = await db.channels.create(req.body)
+  res.status(201).json(channel)
+})
+
+app.post('/channels/user/:id', authenticate, async (req, res) => {
+  const user = await db.users.get(req.params.id)
+  const channel = await db.channels.create(req.body,user)
   res.status(201).json(channel)
 })
 

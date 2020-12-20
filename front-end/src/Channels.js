@@ -54,20 +54,20 @@ export default () => {
           }
         };
   const axiosdata = {
-          email: "vivien.detournay@edu.ece.fr",
+          email: "clemencejldm@gmail.com"
         };
   useEffect( () => {
     const fetch = async () => {
       try{
-        /**
-        const {data: channels} = await axios.get('http://localhost:3001/channels', {
+        
+        /**const {data: channels} = await axios.get('http://localhost:3001/channels', {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
           }})**/
      
         console.log("TRY")
     
-        await axios.get('http://localhost:3001/filtredchannels', axiosdata, config)
+        const {data: channels} = await axios.put('http://localhost:3001/filtredchannels', axiosdata)
         setChannels(channels)
       }catch(err){
         console.error(err)

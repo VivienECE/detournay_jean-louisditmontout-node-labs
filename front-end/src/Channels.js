@@ -23,7 +23,6 @@ const useStyles = (theme) => ({
     
   },
   channel:{
-    //margin: '.2rem',
     '& button':{
       backgroundColor: '#f1f0ea',
       color: '#4db6ac',
@@ -74,17 +73,6 @@ export default () => {
     if(currentUser)
       fetch()
   }, [oauth, setChannels])
-  /*const [users, setUsers] = useState([])
-  let usersOfChannel =[]
-  const fetchUsers = async (channel) => {
-    //setUsers([])
-    const {data: users} = await axios.get(`http://localhost:3001/channels/${channel.id}/users`, {
-      headers: {
-        'Authorization': `Bearer ${oauth.access_token}`
-      }
-    })
-    return users
-  }*/
   return (
     <ul style={styles.channels}>
       { channels.map( (channel, i) => (
